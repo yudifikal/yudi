@@ -14,11 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('tb_tukang', function (Blueprint $table) {
-            $table->integer('id',)->primary()->autoIncrement();
+            $table->id();
             $table->string('nama_tukang', length: 50);
             $table->bigInteger('harga_tukang');
             $table->string('foto_tukang', length: 256);
             $table->string('keterangan_tukang', length: 300);
+            $table->string('status');
         });
     }
 

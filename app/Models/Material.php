@@ -12,7 +12,8 @@ class material extends Model
         'nama_material', // Ensure this field is in the fillable array
         'harga_material',
         'foto_material',
-        'keterangan_material'
+        'keterangan_material',
+        'status'
     ];
     protected $attributes = [
         'nama_material' => 'Default Name' // Set a default value for 'nama_kontruksi'

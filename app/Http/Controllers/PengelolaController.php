@@ -53,6 +53,7 @@ class PengelolaController extends Controller
                 'password' => 'required|string|min:8',
                 'alamat' => 'required|string|max:50',
                 'no_hp' => 'required|string|max:50',
+                'no_hp' => 'required',
 
             ]);
 
@@ -62,7 +63,7 @@ class PengelolaController extends Controller
                 'password' => Hash::make($request->password),
                 'alamat' => $request->alamat,
                 'no_hp' => $request->no_hp,
-                'role' => 'konsumen', // atau sesuai dengan role yang diinginkan
+                'role' => $request->role, // atau sesuai dengan role yang diinginkan
             ]);
             return redirect('/login');
         }

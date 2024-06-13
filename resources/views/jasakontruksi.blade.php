@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Jasa Kontruksi</title>
+  <title>Jasa Konstruksi</title>
   <link rel="stylesheet" href="asset/bootstrap.min.css">
   <style>
     .sidebar {
@@ -47,7 +47,7 @@
         </li>
         <li>
           <a href="/jasakontruksi" class="nav-link text-white">
-            Jasa Kontruksi
+            Jasa Konstruksi
           </a>
         </li>
         <li>
@@ -119,21 +119,21 @@
                 <tr>
                   <td>{{ $i }}</td>
                   <td>{{ $item->nama_kontruksi }}</td>
-                  <td>Rp.{{ $item->harga_kontruksi }}</td>
+                  <td>{{ 'Rp.' . number_format($item->harga_kontruksi, null, '.') }}</td>
                   <td><img src="{{ asset('uploads/' . $item->foto_kontruksi) }}" width="50"></td>
                   <td>
                     {{ Str::limit($item->keterangan_kontruksi, 10) }}...
                     <!-- Button trigger modal -->
-                    <a href="#" data-bs-toggle="modal"
-                      data-bs-target="#keteranganModal{{ $item->id_kontruksi }}">Read More</a>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#keteranganModal{{ $item->id }}">Read
+                      More</a>
 
                     <!-- Modal -->
-                    <div class="modal fade" id="keteranganModal{{ $item->id_kontruksi }}" tabindex="-1"
-                      aria-labelledby="keteranganModalLabel{{ $item->id_kontruksi }}" aria-hidden="true">
+                    <div class="modal fade" id="keteranganModal{{ $item->id }}" tabindex="-1"
+                      aria-labelledby="keteranganModalLabel{{ $item->id }}" aria-hidden="true">
                       <div class="modal-dialog">
                         <div class="modal-content">
                           <div class="modal-header">
-                            <h5 class="modal-title" id="keteranganModalLabel{{ $item->id_kontruksi }}">Keterangan
+                            <h5 class="modal-title" id="keteranganModalLabel{{ $item->id }}">Keterangan
                               Lengkap</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                               aria-label="Close"></button>
@@ -150,9 +150,9 @@
                   </td>
                   <td>
                     <div class="btn-group btn-group-sm" role="group">
-                      <a href='{{ 'jasakontruksi/' . $item->id_kontruksi . '/edit' }}'
-                        class="btn btn-warning btn-block me-2" style="color: black; font-size: 14px;">Edit</a>
-                      <form class="d-inline" action="{{ url('jasakontruksi/' . $item->id_kontruksi) }}" method="post">
+                      <a href='{{ 'jasakontruksi/' . $item->id . '/edit' }}' class="btn btn-warning btn-block me-2"
+                        style="color: black; font-size: 14px;">Edit</a>
+                      <form class="d-inline" action="{{ url('jasakontruksi/' . $item->id) }}" method="post">
                         @csrf
                         @method('DELETE')
                         <button type="submit" name="submit" class="btn btn-danger btn-block"

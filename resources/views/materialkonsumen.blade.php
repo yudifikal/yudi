@@ -44,7 +44,7 @@
           </li>
           <li class="nav-item">
             <a class="nav-link {{ Request::is('jasakontruksikonsumen') ? 'active' : '' }}"
-              href="/jasakontruksikonsumen">Jasa Kontruksi</a>
+              href="/jasakontruksikonsumen">Jasa Konstruksi</a>
           </li>
           <li class="nav-item">
             <a class="nav-link {{ Request::is('jasatukangkonsumen') ? 'active' : '' }}" href="/jasatukangkonsumen">Jasa
@@ -77,10 +77,12 @@
               <div class="card-body">
                 <h5 class="card-title">{{ $item->nama_material }}</h5>
                 <p class="card-text">{{ $item->keterangan_material }}</p>
-                <p class="card-text">Harga : Rp.{{ $item->harga_material }}</p>
+                <p class="card-text">{{ 'Harga : Rp.' . number_format($item->harga_material, null, '.') }}</p>
+                <p class="card-text">{{ $item->status }}</p>
               </div>
               <div class="card-footer">
-                <button class="btn btn-primary w-100">Order Now</button>
+                <a href="{{ route('formPesananMaterial', ['id' => $item->id]) }}" class="btn btn-primary">Buat
+                  Pesanan</a>
               </div>
             </div>
           </div>

@@ -59,7 +59,7 @@
           </li>
           <li class="nav-item">
             <a class="nav-link {{ Request::is('jasakontruksikonsumen') ? 'active' : '' }}"
-              href="/jasakontruksikonsumen">Jasa Kontruksi</a>
+              href="/jasakontruksikonsumen">Jasa Konstruksi</a>
           </li>
           <li class="nav-item">
             <a class="nav-link {{ Request::is('jasatukangkonsumen') ? 'active' : '' }}" href="/jasatukangkonsumen">Jasa
@@ -87,9 +87,11 @@
           <img src="{{ asset('uploads/' . $item->foto_tukang) }}" width="100">
           <div class="card-content">
             <h4 class="card-title mb-1">{{ $item->nama_tukang }}</h4>
-            <div class="card-price">Rp. {{ $item->harga_tukang }}</div>
+            <div class="card-price">{{ 'Rp.' . number_format($item->harga_tukang, null, '.') }}</div>
             <div class="card-description">{{ $item->keterangan_tukang }}</div>
-            <button class="btn btn-primary">Tambahkan Pesanan</button>
+            <div class="card-status">{{ $item->status }}</div>
+            <a href="{{ route('formPesananTukang', ['id' => $item->id]) }}" class="btn btn-primary">Tambahkan
+              Pesanan</a>
           </div>
         </div>
       </div>

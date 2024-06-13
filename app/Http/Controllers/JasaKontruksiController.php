@@ -21,13 +21,13 @@ class JasaKontruksiController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id' => 'required',
+
             'nama_kontruksi' => 'required',
             'harga_kontruksi' => 'required',
             'keterangan_kontruksi' => 'required',
             'foto_kontruksi' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
-            'id.required' => 'Id Wajib diisi',
+
             'nama_kontruksi.required' => 'Nama Wajib diisi',
             'harga_kontruksi.required' => 'Harga Wajib diisi',
             'keterangan_kontruksi.required' => 'Keterangan Wajib diisi',

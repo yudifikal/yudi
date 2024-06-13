@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Jasa tukang</title>
+  <title>Edit Tukang</title>
   <link rel="stylesheet" href="{{ asset('asset/bootstrap.min.css') }}">
 </head>
 
@@ -24,7 +24,7 @@
         </li>
         <li>
           <a href="/jasakontruksi" class="nav-link text-white">
-            Jasa Kontruksi
+            Jasa Konstruksi
           </a>
         </li>
         <li>
@@ -58,7 +58,7 @@
         </div>
 
       @endif
-      <form action='{{ url('jasatukang/' . $data->id_tukang) }}' method='post' enctype="multipart/form-data">
+      <form action='{{ url('jasatukang/' . $data->id) }}' method='post' enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="my-3 p-3 bg-body rounded shadow-sm">
@@ -66,7 +66,7 @@
           <div class="mb-3 row">
             <label for="nim" class="col-sm-2 col-form-label">No</label>
             <div class="col-sm-10">
-              {{ $data->id_tukang }}
+              {{ $data->id }}
             </div>
           </div>
           <div class="mb-3 row">
@@ -94,6 +94,12 @@
             <div class="col-sm-10">
               <input type="text" class="form-control" value="{{ $data->keterangan_tukang }}" name='keterangan_tukang'
                 id="keterangan_tukang">
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="jurusan" class="col-sm-2 col-form-label">Status</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" value="{{ $data->status }}" name='status' id="status">
             </div>
           </div>
           <div class="mb-3 row">

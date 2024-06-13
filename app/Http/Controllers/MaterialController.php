@@ -21,15 +21,17 @@ class MaterialController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id' => 'required',
+
             'nama_material' => 'required',
             'harga_material' => 'required',
             'keterangan_material' => 'required',
+            'status' => 'required',
             'foto_material' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
-            'id.required' => 'Id Wajib diisi',
+
             'nama_material.required' => 'Nama Wajib diisi',
             'harga_material.required' => 'Harga Wajib diisi',
+            'status.required' => 'Status Wajib diisi',
             'keterangan_material.required' => 'Keterangan Wajib diisi',
             'foto_material.required' => 'Foto Wajib diisi',
             'foto_material.image' => 'File harus berupa gambar',
@@ -40,7 +42,7 @@ class MaterialController extends Controller
         //     dd($file);  // Dump the file object to see if it's received correctly
         // }
 
-        $data = $request->only(['id', 'nama_material', 'harga_material', 'keterangan_material']);
+        $data = $request->only(['id', 'nama_material', 'harga_material', 'keterangan_material', 'status']);
 
         if ($request->hasFile('foto_material')) {
             $filename = uniqid() . '.' . $request->foto_material->extension();
@@ -74,6 +76,7 @@ class MaterialController extends Controller
             'harga_material' => 'required',
             'keterangan_material' => 'required',
             'foto_material' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'status' => 'required',
         ]);
 
         $data = material::findOrFail($id);
@@ -93,6 +96,7 @@ class MaterialController extends Controller
             'nama_material' => $request->nama_material,
             'harga_material' => $request->harga_material,
             'keterangan_material' => $request->keterangan_material,
+            'status' => $request->status,
         ]);
 
         return redirect()->route('material.index')->with('success', 'Data berhasil diperbarui');

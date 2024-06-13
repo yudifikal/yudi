@@ -42,6 +42,16 @@
             Pesanan
           </a>
         </li>
+        <li>
+          <a href="/konsumen" class="nav-link text-white">
+            Konsumen
+          </a>
+        </li>
+        <li>
+          <a href="{{ route('logout') }}" class="nav-link text-white">
+            Logout
+          </a>
+        </li>
       </ul>
     </div>
     <main class="container">
@@ -62,12 +72,7 @@
         @csrf
         <div class="my-3 p-3 bg-body rounded shadow-sm">
           <a href='{{ url('jasatukang') }}' class="btn btn-secondary">Kembali</a>
-          <div class="mb-3 row">
-            <label for="nim" class="col-sm-2 col-form-label">No</label>
-            <div class="col-sm-10">
-              <input type="number" class="form-control" value="{{ old('id_tukang') }}" name='id_tukang' id="id_tukang">
-            </div>
-          </div>
+
           <div class="mb-3 row">
             <label for="nama" class="col-sm-2 col-form-label">Nama tukang</label>
             <div class="col-sm-10">
@@ -93,6 +98,12 @@
             <div class="col-sm-10">
               <input type="text" class="form-control" value="{{ old('keterangan_tukang') }}" name='keterangan_tukang'
                 id="keterangan_tukang">
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="jurusan" class="col-sm-2 col-form-label">Status</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" value="{{ old('status') }}" name='status' id="status">
             </div>
           </div>
           <div class="mb-3 row">

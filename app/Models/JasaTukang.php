@@ -12,7 +12,8 @@ class JasaTukang extends Model
         'nama_tukang', // Ensure this field is in the fillable array
         'harga_tukang',
         'foto_tukang',
-        'keterangan_tukang'
+        'keterangan_tukang',
+        'status'
     ];
     protected $attributes = [
         'nama_tukang' => 'Default Name' // Set a default value for 'nama_kontruksi'

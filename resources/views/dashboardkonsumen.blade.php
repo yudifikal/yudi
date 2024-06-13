@@ -59,7 +59,7 @@
           </li>
           <li class="nav-item">
             <a class="nav-link {{ Request::is('jasakontruksikonsumen') ? 'active' : '' }}"
-              href="/jasakontruksikonsumen">Jasa Kontruksi</a>
+              href="/jasakontruksikonsumen">Jasa Konstruksi</a>
           </li>
           <li class="nav-item">
             <a class="nav-link {{ Request::is('jasatukangkonsumen') ? 'active' : '' }}" href="/jasatukangkonsumen">Jasa

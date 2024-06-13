@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('tb_kontruksi', function (Blueprint $table) {
-            $table->integer('id',)->primary()->autoIncrement();
+            $table->id();
             $table->string('nama_kontruksi', length: 50);
             $table->bigInteger('harga_kontruksi');
             $table->string('foto_kontruksi', length: 256);
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('tb_kontruksi');
     }
 };

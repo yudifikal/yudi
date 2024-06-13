@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Jasa Kontruksi</title>
+  <title>Edit Konstruksi</title>
   <link rel="stylesheet" href="{{ asset('asset/bootstrap.min.css') }}">
 </head>
 
@@ -58,7 +58,7 @@
         </div>
 
       @endif
-      <form action='{{ url('jasakontruksi/' . $data->id_kontruksi) }}' method='post' enctype="multipart/form-data">
+      <form action='{{ url('jasakontruksi/' . $data->id) }}' method='post' enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="my-3 p-3 bg-body rounded shadow-sm">
@@ -66,11 +66,11 @@
           <div class="mb-3 row">
             <label for="nim" class="col-sm-2 col-form-label">No</label>
             <div class="col-sm-10">
-              {{ $data->id_kontruksi }}
+              {{ $data->id }}
             </div>
           </div>
           <div class="mb-3 row">
-            <label for="nama" class="col-sm-2 col-form-label">Nama Kontruksi</label>
+            <label for="nama" class="col-sm-2 col-form-label">Nama Konstruksi</label>
             <div class="col-sm-10">
               <input type="text" class="form-control" value="{{ $data->nama_kontruksi }}" name='nama_kontruksi'
                 id="nama_kontruksi">

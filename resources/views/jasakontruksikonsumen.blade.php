@@ -22,6 +22,13 @@
       /* Tinggi gambar di dalam kartu */
       object-fit: cover;
     }
+
+    .floating-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
   </style>
   <title>Jasa Kontruksi</title>
 </head>
@@ -75,15 +82,18 @@
             <div class="card-body">
               <h5 class="card-title">{{ $item->nama_kontruksi }}</h5>
               <p class="card-text">{{ $item->keterangan_kontruksi }}</p>
-              <p class="card-text">Harga : Rp.{{ $item->harga_kontruksi }}</p>
+              <p class="card-text">{{ 'Harga : Rp.' . number_format($item->harga_kontruksi, null, '.') }}</p>
             </div>
             <div class="card-footer">
-              <button class="btn btn-primary w-100">Order Now</button>
+              <a href="{{ route('konsultasi.create', $item->id) }}" class="btn btn-primary w-100">Atur jadwal
+                konsultasi</a>
             </div>
           </div>
         </div>
       @endforeach
     </div>
+    <!-- Tombol untuk melihat tampilan jadwal konsultasi dan negosiasi -->
+    <a href="{{ route('konsultasi.index') }}" class="btn btn-secondary floating-btn">Lihat Jadwal Konsultasi</a>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

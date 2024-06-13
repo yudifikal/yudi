@@ -21,16 +21,18 @@ class JasaTukangController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id' => 'required',
+
             'nama_tukang' => 'required',
             'harga_tukang' => 'required',
             'keterangan_tukang' => 'required',
             'foto_tukang' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'status' => 'required',
         ], [
-            'id.required' => 'Id Wajib diisi',
+
             'nama_tukang.required' => 'Nama Wajib diisi',
             'harga_tukang.required' => 'Harga Wajib diisi',
             'keterangan_tukang.required' => 'Keterangan Wajib diisi',
+            'status.required' => 'Status Wajib diisi',
             'foto_tukang.required' => 'Foto Wajib diisi',
             'foto_tukang.image' => 'File harus berupa gambar',
             'foto_tukang.mimes' => 'File harus berformat: jpeg, png, jpg, gif',
@@ -40,7 +42,7 @@ class JasaTukangController extends Controller
         //     dd($file);  // Dump the file object to see if it's received correctly
         // }
 
-        $data = $request->only(['id', 'nama_tukang', 'harga_tukang', 'keterangan_tukang']);
+        $data = $request->only(['id', 'nama_tukang', 'harga_tukang', 'keterangan_tukang', 'status']);
 
         if ($request->hasFile('foto_tukang')) {
             $filename = uniqid() . '.' . $request->foto_tukang->extension();
@@ -74,6 +76,7 @@ class JasaTukangController extends Controller
             'harga_tukang' => 'required',
             'keterangan_tukang' => 'required',
             'foto_tukang' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'status' => 'required',
         ]);
 
         $data = JasaTukang::findOrFail($id);
@@ -93,6 +96,7 @@ class JasaTukangController extends Controller
             'nama_tukang' => $request->nama_tukang,
             'harga_tukang' => $request->harga_tukang,
             'keterangan_tukang' => $request->keterangan_tukang,
+            'status' => $request->status,
         ]);
 
         return redirect()->route('jasatukang.index')->with('success', 'Data berhasil diperbarui');

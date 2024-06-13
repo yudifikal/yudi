@@ -30,6 +30,18 @@
       padding: 20px;
       padding-top: 30px;
     }
+
+    .order-card {
+      width: 50%;
+      margin-bottom: 20px;
+    }
+
+    h2.dashboard-title {
+      color: white;
+      background-color: black;
+      padding: 10px;
+      display: inline-block;
+    }
   </style>
 </head>
 
@@ -48,7 +60,7 @@
         </li>
         <li>
           <a href="/jasakontruksi" class="nav-link text-white">
-            Jasa Kontruksi
+            Jasa Konstruksi
           </a>
         </li>
         <li>
@@ -78,39 +90,78 @@
         </li>
       </ul>
     </div>
-
     <div class="content">
-      <div class="container mt-5">
-        <div class="row">
-          <div class="col-md-8">
-            <div class="order-card">
-              <h5>Pesanan Konsumen</h5>
-              <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0"
-                  aria-valuemax="100">50%</div>
-              </div>
-              <div class="d-flex justify-content-between">
-                <button class="btn btn-danger" onclick="decreaseProgress()">-</button>
-                <button class="btn btn-success" onclick="increaseProgress()">+</button>
-              </div>
-              <img src="{{ asset('uploads/logo.png') }}" alt="Order Image" class="img-fluid mt-3">
-            </div>
-            <div class="order-card mt-4">
-              <h5>Ulasan Konsumen</h5>
-              <div class="card">
-                <div class="card-body">
-                  <p class="card-text">"Pelayanan sangat memuaskan, hasil pekerjaan rapi dan sesuai dengan harapan."</p>
-                  <footer class="blockquote-footer">Konsumen A</footer>
-                </div>
-              </div>
+      <div class="container">
 
+        @if (session('success'))
+          <div class="alert alert-success">
+            {{ session('success') }}
+          </div>
+        @endif
+        <h3>Kelola Jadwal Konsultasi</h3>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Nama</th>
+              <th>Alamat</th>
+              <th>Nomor HP</th>
+              <th>Kontruksi</th>
+              <th>Tanggal</th>
+              <th>Jam</th>
+              <th>Status</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach ($konsultasi as $item)
+              <tr>
+                <td>{{ $item->user->nama }}</td>
+                <td>{{ $item->user->alamat }}</td>
+                <td>{{ $item->user->no_hp }}</td>
+                <td>{{ $item->kontruksi->nama_kontruksi }}</td>
+                <td>{{ $item->tanggal_konsultasi }}</td>
+                <td>{{ $item->jam_konsultasi }}</td>
+                <td>{{ $item->status }}</td>
+                <td>
+                  <form action="{{ route('admin.konsultasi.approve', $item->id) }}" method="POST"
+                    style="display:inline-block;">
+                    @csrf
+                    <button type="submit" class="btn btn-success">Setujui</button>
+                  </form>
+                  <form action="{{ route('admin.konsultasi.reject', $item->id) }}" method="POST"
+                    style="display:inline-block;">
+                    @csrf
+                    <button type="submit" class="btn btn-danger">Tolak</button>
+                  </form>
+                </td>
+              </tr>
+            @endforeach
+          </tbody>
+        </table>
+        <div class="order-card mt-4">
+          <h5>Pesanan Konsumen</h5>
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0"
+              aria-valuemax="100">50%</div>
+          </div>
+          <div class="d-flex justify-content-between">
+            <button class="btn btn-danger" onclick="decreaseProgress()">-</button>
+            <button class="btn btn-success" onclick="increaseProgress()">+</button>
+          </div>
+          <img src="{{ asset('uploads/logo.png') }}" alt="Order Image" class="img-fluid mt-3">
+        </div>
+        <div class="order-card mt-4">
+          <h5>Ulasan Konsumen</h5>
+          <div class="card">
+            <div class="card-body">
+              <p class="card-text">"Pelayanan sangat memuaskan, hasil pekerjaan rapi dan sesuai dengan harapan."</p>
+              <footer class="blockquote-footer">Konsumen A</footer>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>

@@ -47,7 +47,7 @@
         </li>
         <li>
           <a href="/jasakontruksi" class="nav-link text-white">
-            Jasa Kontruksi
+            Jasa Konstruksi
           </a>
         </li>
         <li>
@@ -110,6 +110,7 @@
                 <th class="col-md-4">Harga</th>
                 <th class="col-md-2">Foto</th>
                 <th class="col-md-2">Keterangan</th>
+                <th class="col-md-2">Status</th>
                 <th class="col-md-2">Aksi</th>
               </tr>
             </thead>
@@ -119,14 +120,15 @@
                 <tr>
                   <td>{{ $i }}</td>
                   <td>{{ $item->nama_material }}</td>
-                  <td>Rp.{{ $item->harga_material }}</td>
+                  <td>{{ 'Rp.' . number_format($item->harga_material, null, '.') }}</td>
                   <td><img src="{{ asset('uploads/' . $item->foto_material) }}" width="50"></td>
                   <td>{{ $item->keterangan_material }}</td>
+                  <td>{{ $item->status }}</td>
                   <td>
                     <div class="btn-group btn-group-sm" role="group">
-                      <a href='{{ 'material/' . $item->id_material . '/edit' }}' class="btn btn-warning btn-block me-2"
+                      <a href='{{ 'material/' . $item->id . '/edit' }}' class="btn btn-warning btn-block me-2"
                         style="color: black; font-size: 14px;">Edit</a>
-                      <form class="d-inline" action="{{ url('material/' . $item->id_material) }}" method="post">
+                      <form class="d-inline" action="{{ url('material/' . $item->id) }}" method="post">
                         @csrf
                         @method('DELETE')
                         <button type="submit" name="submit" class="btn btn-danger btn-block"

@@ -51,6 +51,10 @@
             <label class="form-label">Nomor Hp</label>
             <input type="text" name="no_hp" class="form-control">
           </div>
+          <div class="mb-3">
+            <label class="form-label">Role</label>
+            <input type="text" name="role" class="form-control">
+          </div>
           <button class="btn btn-success">kirim</button>
       </div>
       </form>
