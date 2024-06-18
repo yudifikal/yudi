@@ -17,18 +17,16 @@ return new class extends Migration
             $table->id();
             $table->date('tgl_pesanan');
             $table->bigInteger('total_bayar');
-            $table->string('nama_konsumen');
+            $table->string('email_konsumen');
             $table->unsignedBigInteger('id_material');
-            $table->string('alamat_konsumen');
-            $table->string('no_hpkonsumen');
+            $table->string('pesanan')->nullable();
+            $table->integer('hari')->nullable();
             $table->string('status')->default('Menunggu Pembayaran');
             $table->timestamps();
 
             // Foreign keys
             $table->foreign('id_material')->references('id')->on('tb_material')->onDelete('no action');
-            $table->foreign('nama_konsumen')->references('email')->on('users')->onDelete('no action');
-            $table->foreign('alamat_konsumen')->references('email')->on('users')->onDelete('no action');
-            $table->foreign('no_hpkonsumen')->references('email')->on('users')->onDelete('no action');
+            $table->foreign('email_konsumen')->references('email')->on('users')->onDelete('no action');
         });
     }
 

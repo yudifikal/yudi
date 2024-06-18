@@ -9,6 +9,7 @@
   <style>
     .navbar-brand {
       color: #007bff !important;
+      font-weight: bold;
     }
 
     .card-custom {
@@ -23,23 +24,23 @@
     .card-title {
       font-size: 1.25rem;
       margin-bottom: 0.75rem;
+      font-weight: bold;
     }
 
     .card-text {
       margin-bottom: 0.5rem;
     }
 
-    /* Set a fixed height for each card */
     .card {
       height: 100%;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
     }
 
-    /* Ensure cards fill the container height */
     .container {
       height: 100%;
     }
 
-    /* Ensure the body fills the viewport */
     html,
     body {
       height: 100%;
@@ -47,16 +48,77 @@
       padding: 0;
     }
 
-    /* Add overflow-y auto to the container to enable scrolling if content exceeds screen height */
     .container {
       overflow-y: auto;
+    }
+
+    .section-title {
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+      font-weight: bold;
+      border-bottom: 2px solid #007bff;
+      padding-bottom: 0.5rem;
+    }
+
+    .navbar-nav .nav-link.active {
+      font-weight: bold;
+      color: #007bff !important;
+    }
+
+    .nav-link {
+      transition: color 0.3s ease;
+      font-weight: bold;
+    }
+
+    .nav-link:hover {
+      color: #007bff !important;
+    }
+
+    .container-fluid-content {
+      padding-top: 3rem;
+    }
+
+    .btn-pay-now {
+      margin-top: auto;
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+    }
+
+    .btn-pay-now:hover {
+      background-color: #0056b3;
+    }
+
+    .btn-order-received {
+      margin-top: 0.5rem;
+      background-color: #dc3545;
+      color: white;
+      font-weight: bold;
+    }
+
+    .btn-order-received:hover {
+      background-color: #c82333;
+    }
+
+    .status-btn {
+      margin-top: 10px;
+    }
+
+    .status-belum {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .status-sudah {
+      background-color: #28a745;
+      color: white;
     }
   </style>
   <title>Daftar Pesanan</title>
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="position: fixed; width: 100%; z-index: 1000; top: 0;">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">CV. BANGUN BERSAMA</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -92,10 +154,10 @@
     </div>
   </nav>
 
-  <div class="container-fluid mt-5 pt-4">
-    <h2>Daftar Pesanan</h2>
+  <div class="container-fluid container-fluid-content">
+    <h2 class="section-title">Daftar Pesanan</h2>
 
-    <h3>Pesanan Konstruksi</h3>
+    <h3 class="section-title">Pesanan Konstruksi</h3>
     <div class="row">
       @forelse ($pesananKontruksi as $pesanan)
         <div class="col-md-4 mb-4">
@@ -109,6 +171,8 @@
               <p class="card-text">DP Bayar: Rp. {{ number_format($pesanan->dp_bayar, 0, ',', '.') }}</p>
               <p class="card-text">Sisa Bayar: Rp. {{ number_format($pesanan->sisa_bayar, 0, ',', '.') }}</p>
               <p class="card-text">Status: {{ $pesanan->status }}</p>
+              <a href="{{ route('bayar.form', $pesanan->id) }}" class="btn btn-pay-now">Bayar Sekarang</a>
+
             </div>
           </div>
         </div>
@@ -117,18 +181,30 @@
       @endforelse
     </div>
 
-    <h3>Pesanan Tukang</h3>
+    <h3 class="section-title">Pesanan Tukang</h3>
     <div class="row">
       @forelse ($pesananTukang as $pesanan)
         <div class="col-md-4 mb-4">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">{{ $pesanan->nama_konsumen }}</h5>
+              <h5 class="card-title">{{ $pesanan->email_konsumen }}</h5>
               <p class="card-text">Alamat: {{ $pesanan->alamat_konsumen }}</p>
               <p class="card-text">Nomor HP: {{ $pesanan->no_hpkonsumen }}</p>
               <p class="card-text">Tukang yang dipesan: {{ $pesanan->nama_tukang }}</p>
+              <p class="card-text">Jumlah Hari: {{ $pesanan->jumlah_hari }}</p>
               <p class="card-text">Total Bayar: Rp. {{ number_format($pesanan->total_bayar, 0, ',', '.') }}</p>
               <p class="card-text">Status: {{ $pesanan->status }}</p>
+              <a href="{{ route('bayar.form', $pesanan->id) }}" class="btn btn-pay-now">Bayar Sekarang</a>
+              @if ($pesanan->status != 'Diterima')
+                <form action="{{ route('pesanankonsumen.update', ['id' => $pesanan->id, 'type' => 'tukang']) }}"
+                  method="POST">
+                  @csrf
+                  @method('PATCH')
+                  <button type="submit" class="btn status-btn status-belum">Terima Pesanan</button>
+                </form>
+              @else
+                <button class="btn status-btn status-sudah" disabled>Sudah Diterima</button>
+              @endif
             </div>
           </div>
         </div>
@@ -137,7 +213,7 @@
       @endforelse
     </div>
 
-    <h3>Pesanan Material</h3>
+    <h3 class="section-title">Pesanan Material</h3>
     <div class="row">
       @forelse ($pesananMaterial as $pesanan)
         <div class="col-md-4 mb-4">
@@ -147,8 +223,20 @@
               <p class="card-text">Alamat: {{ $pesanan->alamat_konsumen }}</p>
               <p class="card-text">Nomor HP: {{ $pesanan->no_hpkonsumen }}</p>
               <p class="card-text">Material yang dipesan: {{ $pesanan->nama_material }}</p>
+              <p class="card-text">Jumlah Pesanan: {{ $pesanan->jumlah_hari }}</p>
               <p class="card-text">Total Bayar: Rp. {{ number_format($pesanan->total_bayar, 0, ',', '.') }}</p>
               <p class="card-text">Status: {{ $pesanan->status }}</p>
+              <a href="{{ route('bayar.form', $pesanan->id) }}" class="btn btn-pay-now">Bayar Sekarang</a>
+              @if ($pesanan->status != 'Diterima')
+                <form action="{{ route('pesanankonsumen.update', ['id' => $pesanan->id, 'type' => 'material']) }}"
+                  method="POST">
+                  @csrf
+                  @method('PATCH')
+                  <button type="submit" class="btn status-btn status-belum">Terima Pesanan</button>
+                </form>
+              @else
+                <button class="btn status-btn status-sudah" disabled>Sudah Diterima</button>
+              @endif
             </div>
           </div>
         </div>
@@ -158,4 +246,7 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

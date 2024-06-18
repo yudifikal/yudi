@@ -13,7 +13,7 @@ class PesananMaterial extends Model
     protected $table = 'pesanan_material';
     protected $fillable = [
         'tgl_pesanan', 'total_bayar', 'id_material',
-        'nama_konsumen', 'alamat_konsumen', 'no_hpkonsumen', 'status'
+        'email_konsumen', 'pesanan', 'status', 'hari'
     ];
 
     public function material()
@@ -23,6 +23,6 @@ class PesananMaterial extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'nama_konsumen', 'email');
+        return $this->belongsTo(User::class, 'email_konsumen', 'email');
     }
 }

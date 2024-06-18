@@ -9,25 +9,66 @@
   <style>
     .navbar-brand {
       color: #007bff !important;
+      font-weight: bold;
     }
 
     .custom-card {
-      height: 400px;
-      /* Tinggi kartu yang diinginkan */
+      height: 500px;
+      /* Desired card height */
       margin-bottom: 20px;
     }
 
     .custom-img {
-      height: 200px;
-      /* Tinggi gambar di dalam kartu */
+      height: 300px;
+      /* Image height inside the card */
       object-fit: cover;
+    }
+
+    .navbar-nav .nav-link.active {
+      font-weight: bold;
+      color: #007bff !important;
+    }
+
+    .nav-link {
+      transition: color 0.3s ease;
+      font-weight: bold;
+    }
+
+    .nav-link:hover {
+      color: #007bff !important;
+    }
+
+    .container-fluid-content {
+      padding-top: 70px;
+      /* Adjusted based on navbar height and desired spacing */
+    }
+
+    .card {
+      border: none;
+      /* Remove default border */
+      background-color: #fff;
+      /* White background */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      /* Soft shadow */
+    }
+
+    .card-body {
+      padding: 20px;
+      /* Padding inside card body */
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      /* Larger title */
+      margin-bottom: 10px;
+      /* Bottom margin */
     }
   </style>
   <title>Material</title>
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="position: fixed; width: 100%; z-index: 1000; top:0;">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">
         CV. BANGUN BERSAMA
@@ -64,30 +105,28 @@
       </div>
     </div>
   </nav>
-  <div class="container-fluid mt-5" style="padding-top: 30px;">
-    <div class="row row-cols-1 row-cols-md-4 g-4">
-      @if ($data->isEmpty())
-        <p>No data available</p>
-      @else
-        @foreach ($data as $item)
-          <div class="col">
-            <div class="card h-100 custom-card bg-light">
-              <img src="{{ asset('uploads/' . $item->foto_material) }}" alt="Image of {{ $item->nama_material }}"
-                class="card-img-top custom-img">
-              <div class="card-body">
-                <h5 class="card-title">{{ $item->nama_material }}</h5>
-                <p class="card-text">{{ $item->keterangan_material }}</p>
-                <p class="card-text">{{ 'Harga : Rp.' . number_format($item->harga_material, null, '.') }}</p>
-                <p class="card-text">{{ $item->status }}</p>
-              </div>
-              <div class="card-footer">
-                <a href="{{ route('formPesananMaterial', ['id' => $item->id]) }}" class="btn btn-primary">Buat
-                  Pesanan</a>
-              </div>
+
+  <div class="container-fluid container-fluid-content">
+    <div class="row row-cols-1 row-cols-md-4 g-4 justify-content-center">
+      <!-- Cards -->
+      @foreach ($data as $item)
+        <div class="col mb-4">
+          <div class="card h-100 custom-card bg-light">
+            <img src="{{ asset('uploads/' . $item->foto_material) }}" alt="Image of {{ $item->nama_material }}"
+              class="card-img-top custom-img">
+            <div class="card-body">
+              <h5 class="card-title">{{ $item->nama_material }}</h5>
+              <p class="card-text">{{ $item->keterangan_material }}</p>
+              <p class="card-text">{{ 'Harga : Rp.' . number_format($item->harga_material, null, '.') }}</p>
+              <p class="card-text">{{ 'Status : ' . $item->status }}</p>
+            </div>
+            <div class="card-footer">
+              <a href="{{ route('formPesananMaterial', ['id' => $item->id]) }}" class="btn btn-primary w-100">Buat
+                Pesanan</a>
             </div>
           </div>
-        @endforeach
-      @endif
+        </div>
+      @endforeach
     </div>
   </div>
 

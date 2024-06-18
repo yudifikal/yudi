@@ -35,13 +35,13 @@ class KonsultasiController extends Controller
             'status' => 'Menunggu Persetujuan',
         ]);
 
-        return redirect()->route('konsultasi.index');
+        return redirect()->route('dashboardkonsumen');
     }
 
     public function index()
     {
         $konsultasi = Konsultasi::where('nama_konsumen', auth()->user()->email)->get();
 
-        return view('konsultasi.index', compact('konsultasi'));
+        return view('dashboardkonsumen', compact('konsultasi'));
     }
 }

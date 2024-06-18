@@ -1,6 +1,5 @@
 <?php
 
-// Controller: PesananController.php
 namespace App\Http\Controllers;
 
 use App\Models\JasaKontruksi;
@@ -16,14 +15,16 @@ use App\Models\PesananMaterial;
 class PesananController extends Controller
 {
     // Menampilkan form pesanan konstruksi
-    // app/Http/Controllers/PesananController.php
     public function pesananKonsumen()
     {
+        // $pesananKontruksi = PesananKontruksi::where('email_konsumen', auth()->user()->email)->get();
+        // $pesananTukang = PesananTukang::where('email_konsumen', auth()->user()->email)->get();
+        // $pesananMaterial = PesananMaterial::where('email_konsumen', auth()->user()->email)->get();
+
         $pesananKontruksi = PesananKontruksi::all();
         $pesananTukang = PesananTukang::all();
         $pesananMaterial = PesananMaterial::all();
-
-        return view('pesanankonsumen', compact('pesananKontruksi', 'pesananTukang', 'pesananMaterial'));
+        return view('pesananKonsumen', compact('pesananKontruksi', 'pesananTukang', 'pesananMaterial'));
     }
 
     public function formPesananKontruksi($id)
@@ -68,16 +69,19 @@ class PesananController extends Controller
     public function buatPesananTukang(Request $request)
     {
         $request->validate([
-            'total_bayar' => 'required|numeric',
+            'jumlah_hari' => 'required|numeric|min:1',
         ]);
+
+        $harga_tukang = JasaTukang::find($request->tukang_id)->harga_tukang;
+        $total_bayar = $harga_tukang * $request->jumlah_hari;
 
         PesananTukang::create([
             'tgl_pesanan' => now(),
-            'total_bayar' => $request->total_bayar,
+            'total_bayar' => $total_bayar,
             'id_tukang' => $request->tukang_id,
-            'nama_konsumen' => $request->nama_konsumen,
-            'alamat_konsumen' => $request->alamat_konsumen,
-            'no_hpkonsumen' => $request->no_hpkonsumen,
+            'email_konsumen' => auth()->user()->email,
+            'pesanan' => $request->pesanan,
+            'hari' => $request->jumlah_hari,
             'status' => 'Menunggu Pembayaran',
         ]);
 
@@ -97,17 +101,34 @@ class PesananController extends Controller
         $request->validate([
             'total_bayar' => 'required|numeric',
         ]);
-
+        $harga_material = Material::find($request->material_id)->harga_material;
+        $total_bayar = $harga_material * $request->jumlah_hari;
         PesananMaterial::create([
             'tgl_pesanan' => now(),
             'total_bayar' => $request->total_bayar,
             'id_material' => $request->material_id,
-            'nama_konsumen' => $request->nama_konsumen,
-            'alamat_konsumen' => $request->alamat_konsumen,
-            'no_hpkonsumen' => $request->no_hpkonsumen,
+            'email_konsumen' => auth()->user()->email,
+            'pesanan' => $request->pesanan,
+            'hari' => $request->jumlah_hari,
             'status' => 'Menunggu Pembayaran',
         ]);
 
         return redirect()->route('pesanankonsumen')->with('success', 'Pesanan material berhasil dibuat');
+    }
+    public function update(Request $request, $id, $type)
+    {
+
+        if ($type == 'tukang') {
+            $pesanan = PesananTukang::findOrFail($id);
+        } elseif ($type == 'material') {
+            $pesanan = PesananMaterial::findOrFail($id);
+        } else {
+            return redirect()->back()->with('error', 'Invalid type.');
+        }
+
+        $pesanan->status = 'Diterima';
+        $pesanan->save();
+
+        return redirect()->back()->with('success', 'Pesanan berhasil diperbarui.');
     }
 }

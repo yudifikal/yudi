@@ -14,6 +14,7 @@ use App\Http\Controllers\KonsumenController;
 use App\Http\Controllers\KontruksiController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\MkController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PengelolaController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\UserController;
@@ -91,7 +92,7 @@ Route::get('/logout', function () {
 
 Route::get('/konsultasi/jadwal/{id}', [KonsultasiController::class, 'create'])->name('konsultasi.create');
 Route::post('/konsultasi/jadwal', [KonsultasiController::class, 'store'])->name('konsultasi.store');
-Route::get('/konsultasi/jadwal', [KonsultasiController::class, 'index'])->name('konsultasi.index');
+Route::get('/dashboardkonsumen', [KonsultasiController::class, 'index'])->name('dashboardkonsumen');
 
 Route::get('dashboard', [AdminKonsultasiController::class, 'dashboard'])->name('dashboard');
 Route::post('konsultasi/approve/{id}', [AdminKonsultasiController::class, 'approve'])->name('admin.konsultasi.approve');
@@ -109,3 +110,10 @@ Route::get('/formPesananMaterial/{id}', [PesananController::class, 'formPesananM
 Route::post('/buatPesananMaterial', [PesananController::class, 'buatPesananMaterial'])->name('buatPesananMaterial');
 
 Route::get('/pesanan', [AdminPesananController::class, 'index'])->name('pesanan');
+Route::patch('/pesanan/{id}/{type}', [AdminPesananController::class, 'update'])->name('pesanan.update');
+Route::patch('/pesanankonsumen/{id}/{type}', [PesananController::class, 'update'])->name('pesanankonsumen.update');
+
+
+
+Route::get('/bayar/{id}', [PaymentController::class, 'showPaymentForm'])->name('bayar.form');
+Route::post('/bayar', [PaymentController::class, 'processPayment'])->name('bayar.process');

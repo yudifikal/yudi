@@ -9,10 +9,25 @@
   <style>
     .navbar-brand {
       color: #007bff !important;
+      font-weight: bold;
+    }
+
+    .navbar-nav .nav-link.active {
+      font-weight: bold;
+      color: #007bff !important;
+    }
+
+    .nav-link {
+      transition: color 0.3s ease;
+      font-weight: bold;
+    }
+
+    .nav-link:hover {
+      color: #007bff !important;
     }
 
     .card-custom {
-      padding-top: 80px;
+      margin-top: 20px;
     }
 
     .card-body {
@@ -79,21 +94,22 @@
       </div>
     </div>
   </nav>
-  <div class="container mt-5 pt-4">
+
+  <div class="container mt-5 pt-5">
     <h2>Jadwalkan Konsultasi</h2>
     <form action="{{ route('konsultasi.store') }}" method="POST">
       @csrf
       <div class="mb-3">
         <label for="nama" class="form-label">Nama</label>
-        <input type="text" class="form-control" id="nama" value="{{ $user->nama }}" readonly>
+        <input type="text" class="form-control" id="nama_konsumen" value="{{ $user->nama }}" readonly>
       </div>
       <div class="mb-3">
         <label for="alamat" class="form-label">Alamat</label>
-        <input type="text" class="form-control" id="alamat" value="{{ $user->alamat }}" readonly>
+        <input type="text" class="form-control" id="alamat_konsumen" value="{{ $user->alamat }}" readonly>
       </div>
       <div class="mb-3">
         <label for="no_hp" class="form-label">Nomor HP</label>
-        <input type="text" class="form-control" id="no_hp" value="{{ $user->no_hp }}" readonly>
+        <input type="text" class="form-control" id="no_hpkonsumen" value="{{ $user->no_hp }}" readonly>
       </div>
       <div class="mb-3">
         <label for="construction_name" class="form-label">Nama Kontruksi</label>
@@ -117,7 +133,7 @@
       <button type="submit" class="btn btn-primary">Kirim</button>
     </form>
   </div>
-  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

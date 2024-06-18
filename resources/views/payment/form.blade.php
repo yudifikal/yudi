@@ -12,9 +12,52 @@
       font-weight: bold;
     }
 
-    .navbar-nav .nav-link {
-      font-weight: normal;
-      color: white;
+    .card-custom {
+      padding-top: 80px;
+    }
+
+    .card-body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+      font-weight: bold;
+    }
+
+    .card-text {
+      margin-bottom: 0.5rem;
+    }
+
+    .card {
+      height: 100%;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+
+    .container {
+      height: 100%;
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      overflow-y: auto;
+    }
+
+    .section-title {
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+      font-weight: bold;
+      border-bottom: 2px solid #007bff;
+      padding-bottom: 0.5rem;
     }
 
     .navbar-nav .nav-link.active {
@@ -22,36 +65,37 @@
       color: #007bff !important;
     }
 
-    .form-custom {
-      margin-top: 70px;
-      background-color: #f8f9fa;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    .nav-link {
+      transition: color 0.3s ease;
+      font-weight: bold;
     }
 
-    .form-custom h2 {
-      margin-bottom: 20px;
+    .nav-link:hover {
+      color: #007bff !important;
     }
 
-    .form-control[readonly] {
-      background-color: #ffffff;
-      opacity: 1;
+    .container-fluid-content {
+      padding-top: 3rem;
     }
 
-    .btn-primary {
-      white-space: nowrap;
+    .btn-pay-now {
+      margin-top: auto;
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+    }
+
+    .btn-pay-now:hover {
+      background-color: #0056b3;
     }
   </style>
-  <title>Form Pesanan Material</title>
+  <title>Daftar Pesanan</title>
 </head>
 
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">
-        CV. BANGUN BERSAMA
-      </a>
+      <a class="navbar-brand" href="#">CV. BANGUN BERSAMA</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -85,56 +129,37 @@
     </div>
   </nav>
 
-  <div class="container form-custom">
-    <h2>Form Pesanan Material</h2>
-    <form action="{{ route('buatPesananMaterial') }}" method="POST">
+  <div class="container-fluid container-fluid-content">
+    <h2 class="mt-5">Form Pembayaran</h2>
+    <form action="{{ route('bayar.process') }}" method="POST">
       @csrf
+      <input type="hidden" name="order_id" value="{{ $pesanan->id }}">
+      <input type="hidden" name="amount" value="{{ $pesanan->total_bayar }}">
       <div class="mb-3">
-        <label for="nama" class="form-label">Nama</label>
-        <input type="text" class="form-control" id="nama" name="nama_konsumen" value="{{ Auth::user()->nama }}"
+        <label for="nama_konsumen" class="form-label">Nama Konsumen</label>
+        <input type="text" class="form-control" id="nama_konsumen" name="nama_konsumen"
+          value="{{ $pesanan->nama_konsumen }}" readonly>
+      </div>
+      <div class="mb-3">
+        <label for="pesanan" class="form-label">pesanan</label>
+        <input type="text" class="form-control" id="pesanan" name="pesanan" value="{{ $pesanan->pesanan }}"
           readonly>
       </div>
       <div class="mb-3">
-        <label for="alamat" class="form-label">Alamat</label>
-        <input type="text" class="form-control" id="alamat" name="alamat_konsumen"
-          value="{{ Auth::user()->alamat }}" readonly>
-      </div>
-      <div class="mb-3">
-        <label for="no_hp" class="form-label">Nomor HP</label>
-        <input type="text" class="form-control" id="no_hp" name="no_hpkonsumen" value="{{ Auth::user()->no_hp }}"
+        <label for="hari" class="form-label">Jumlah</label>
+        <input type="text" class="form-control" id="hari" name="hari" value="{{ $pesanan->jumlah_hari }}"
           readonly>
-      </div>
-      <div class="mb-3">
-        <label for="pesanan" class="form-label">Pesanan</label>
-        <input type="text" class="form-control" id="pesanan" name="pesanan" value="{{ $material->nama_material }}"
-          readonly>
-      </div>
-      <div class="mb-3">
-        <label for="jumlah_hari" class="form-label">Jumlah Pesanan</label>
-        <input type="number" class="form-control" id="jumlah_hari" name="jumlah_hari" value="1" min="1"
-          max="30">
       </div>
       <div class="mb-3">
         <label for="total_bayar" class="form-label">Total Bayar</label>
-        <input type="number" class="form-control" id="total_bayar" name="total_bayar"
-          value="{{ $material->harga_material }}" readonly>
+        <input type="text" class="form-control" id="total_bayar"
+          value="Rp. {{ number_format($pesanan->total_bayar, 0, ',', '.') }}" readonly>
       </div>
-      <input type="hidden" name="material_id" value="{{ $material->id }}">
-      <input type="hidden" name="email_konsumen" value="{{ Auth::user()->email }}">
-      <button type="submit" class="btn btn-primary">Kirim</button>
+      <button type="submit" class="btn btn-primary">Lanjutkan Pembayaran</button>
     </form>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    document.getElementById('jumlah_hari').addEventListener('input', function() {
-      var jumlahHariInput = document.getElementById('jumlah_hari');
-      var totalBayarInput = document.getElementById('total_bayar');
-      var hargaMaterial = {{ $material->harga_material }};
-      var jumlahHari = parseInt(jumlahHariInput.value);
-      totalBayarInput.value = hargaMaterial * jumlahHari;
-    });
-  </script>
 </body>
 
 </html>

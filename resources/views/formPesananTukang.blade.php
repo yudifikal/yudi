@@ -9,40 +9,45 @@
   <style>
     .navbar-brand {
       color: #007bff !important;
+      font-weight: bold;
     }
 
-    .card-custom {
-      padding-top: 80px;
+    .navbar-nav .nav-link {
+      font-weight: normal;
+      color: white;
     }
 
-    .card-body {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .navbar-nav .nav-link.active {
+      font-weight: bold;
+      color: #007bff !important;
     }
 
-    .card-body img {
-      max-width: 100px;
-      max-height: 100px;
-      margin-right: 20px;
+    .form-custom {
+      margin-top: 70px;
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
-    .card-content {
-      display: flex;
-      align-items: center;
-      width: 100%;
-      justify-content: space-between;
+    .form-custom h2 {
+      margin-bottom: 20px;
     }
 
-    .card-content>div {
-      margin-right: 20px;
+    .form-control[readonly] {
+      background-color: #ffffff;
+      opacity: 1;
+    }
+
+    .btn-primary {
+      white-space: nowrap;
     }
   </style>
-  <title>Jasa Tukang</title>
+  <title>Form Pesanan Tukang</title>
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="position: fixed; width: 100%; z-index: 1000; top: 0;">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">
         CV. BANGUN BERSAMA
@@ -79,33 +84,35 @@
       </div>
     </div>
   </nav>
-  <div class="container mt-5 pt-4">
+
+  <div class="container form-custom">
     <h2>Form Pesanan Tukang</h2>
     <form action="{{ route('buatPesananTukang') }}" method="POST">
       @csrf
       <div class="mb-3">
         <label for="nama" class="form-label">Nama</label>
-        <input type="text" class="form-control" id="nama" name="nama_konsumen" value="{{ Auth::user()->email }}"
+        <input type="text" class="form-control" id="nama" name="nama_konsumen" value="{{ Auth::user()->nama }}"
           readonly>
       </div>
       <div class="mb-3">
         <label for="alamat" class="form-label">Alamat</label>
         <input type="text" class="form-control" id="alamat" name="alamat_konsumen"
-          value="{{ Auth::user()->email }}" readonly>
+          value="{{ Auth::user()->alamat }}" readonly>
       </div>
       <div class="mb-3">
         <label for="no_hp" class="form-label">Nomor HP</label>
-        <input type="text" class="form-control" id="no_hp" name="no_hpkonsumen" value="{{ Auth::user()->email }}"
+        <input type="text" class="form-control" id="no_hp" name="no_hpkonsumen" value="{{ Auth::user()->no_hp }}"
+          readonly>
+      </div>
+      <div class="mb-3">
+        <label for="pesanan" class="form-label">Pesanan</label>
+        <input type="text" class="form-control" id="pesanan" name="pesanan" value="{{ $tukang->nama_tukang }}"
           readonly>
       </div>
       <div class="mb-3">
         <label for="jumlah_hari" class="form-label">Jumlah Hari</label>
-        <div class="input-group">
-          <button class="btn btn-outline-secondary" type="button" id="subtractDays">-</button>
-          <input type="number" class="form-control" id="jumlah_hari" name="jumlah_hari" value="1" min="1"
-            max="30" readonly>
-          <button class="btn btn-outline-secondary" type="button" id="addDays">+</button>
-        </div>
+        <input type="number" class="form-control" id="jumlah_hari" name="jumlah_hari" value="1" min="1"
+          max="30">
       </div>
       <div class="mb-3">
         <label for="total_bayar" class="form-label">Total Bayar</label>
@@ -113,37 +120,20 @@
           value="{{ $tukang->harga_tukang }}" readonly>
       </div>
       <input type="hidden" name="tukang_id" value="{{ $tukang->id }}">
-
       <button type="submit" class="btn btn-primary">Kirim</button>
     </form>
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    document.getElementById('addDays').addEventListener('click', function() {
+    document.getElementById('jumlah_hari').addEventListener('input', function() {
       var jumlahHariInput = document.getElementById('jumlah_hari');
       var totalBayarInput = document.getElementById('total_bayar');
       var hargaTukang = {{ $tukang->harga_tukang }};
       var jumlahHari = parseInt(jumlahHariInput.value);
-      if (jumlahHari < 30) {
-        jumlahHari++;
-        jumlahHariInput.value = jumlahHari;
-        totalBayarInput.value = hargaTukang * jumlahHari;
-      }
-    });
-
-    document.getElementById('subtractDays').addEventListener('click', function() {
-      var jumlahHariInput = document.getElementById('jumlah_hari');
-      var totalBayarInput = document.getElementById('total_bayar');
-      var hargaTukang = {{ $tukang->harga_tukang }};
-      var jumlahHari = parseInt(jumlahHariInput.value);
-      if (jumlahHari > 1) {
-        jumlahHari--;
-        jumlahHariInput.value = jumlahHari;
-        totalBayarInput.value = hargaTukang * jumlahHari;
-      }
+      totalBayarInput.value = hargaTukang * jumlahHari;
     });
   </script>
 </body>
 
 </html>
-<

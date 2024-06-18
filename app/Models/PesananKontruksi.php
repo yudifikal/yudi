@@ -12,8 +12,8 @@ class PesananKontruksi extends Model
 
     protected $table = 'pesanan_kontruksi';
     protected $fillable = [
-        'tgl_pesanan', 'dp_bayar', 'total_bayar', 'sisa_bayar', 'id_kontruksi',
-        'nama_konsumen', 'alamat_konsumen', 'no_hpkonsumen', 'status'
+        'tanggal', 'id_kontruksi',
+        'email_konsumen', 'dibayar'
     ];
 
     public function kontruksi()

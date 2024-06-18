@@ -12,8 +12,8 @@ class PesananTukang extends Model
 
     protected $table = 'pesanan_tukang';
     protected $fillable = [
-        'tgl_pesanan', 'total_bayar', 'id_tukang',
-        'nama_konsumen', 'alamat_konsumen', 'no_hpkonsumen', 'status'
+        'tgl_pesanan', 'total_bayar', 'pesanan',
+        'email_konsumen', 'id_tukang', 'status', 'hari'
     ];
 
     public function tukang()
@@ -23,6 +23,6 @@ class PesananTukang extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'nama_konsumen', 'email');
+        return $this->belongsTo(User::class, 'email_konsumen', 'email');
     }
 }

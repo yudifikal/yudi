@@ -9,10 +9,26 @@
   <style>
     .navbar-brand {
       color: #007bff !important;
+      font-weight: bold;
+    }
+
+    .navbar-nav .nav-link.active {
+      font-weight: bold;
+      color: #007bff !important;
+    }
+
+    .nav-link {
+      transition: color 0.3s ease;
+      font-weight: bold;
+    }
+
+    .nav-link:hover {
+      color: #007bff !important;
     }
 
     .card-custom {
-      padding-top: 80px;
+      margin-top: 70px;
+      /* Reduced space between navbar and cards */
     }
 
     .card-body {
@@ -36,6 +52,20 @@
 
     .card-content>div {
       margin-right: 20px;
+    }
+
+    .card-title {
+      margin-bottom: 0;
+    }
+
+    .card-price,
+    .card-description,
+    .card-status {
+      margin: 0 10px;
+    }
+
+    .btn-primary {
+      white-space: nowrap;
     }
   </style>
   <title>Jasa Tukang</title>
@@ -97,6 +127,7 @@
       </div>
     @endforeach
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

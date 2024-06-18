@@ -9,17 +9,18 @@
   <style>
     .navbar-brand {
       color: #007bff !important;
+      font-weight: bold;
     }
 
     .below-navbar-image {
       height: 160px;
-      /* Adjusted height for better visibility */
       background-image: url('{{ asset('uploads/dashboard.png') }}');
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center;
       width: 100%;
       margin-top: 56px;
+      /* Same height as navbar */
     }
 
     .order-card {
@@ -37,12 +38,30 @@
     .progress-bar {
       background-color: #007bff;
     }
+
+    .navbar-nav .nav-link.active {
+      font-weight: bold;
+      color: #007bff !important;
+    }
+
+    .nav-link {
+      transition: color 0.3s ease;
+      font-weight: bold;
+    }
+
+    .nav-link:hover {
+      color: #007bff !important;
+    }
+
+    .container-fluid-content {
+      padding-top: 1rem;
+    }
   </style>
   <title>Dashboard</title>
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="position: fixed; width: 100%; z-index: 1000; top:0;">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">
         CV. BANGUN BERSAMA
@@ -81,30 +100,66 @@
   </nav>
 
   <div class="below-navbar-image"></div>
+  <div class="container-fluid container-fluid-content">
+    <h2>Jadwal Konsultasi</h2>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Nama</th>
+          <th>Alamat</th>
+          <th>Nomor HP</th>
+          <th>Kontruksi</th>
+          <th>Harga Kontruksi</th>
+          <th>Tanggal</th>
+          <th>Jam</th>
+          <th>Status</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach ($konsultasi as $item)
+          <tr>
+            <td>{{ $item->user->nama }}</td>
+            <td>{{ $item->user->alamat }}</td>
+            <td>{{ $item->user->no_hp }}</td>
+            <td>{{ $item->kontruksi->nama_kontruksi }}</td>
+            <td>{{ $item->kontruksi->harga_kontruksi }}</td>
+            <td>{{ $item->tanggal_konsultasi }}</td>
+            <td>{{ $item->jam_konsultasi }}</td>
+            <td>{{ $item->status }}</td>
+            <td>
+              @if ($item->status == 'Ditolak, Silahkan atur jadwal baru')
+                <a href="{{ route('konsultasi.create', $item->id) }}" class="btn btn-primary">Atur Jadwal Baru</a>
+              @endif
+            </td>
+          </tr>
+        @endforeach
+      </tbody>
+    </table>
 
-  <div class="container mt-5">
-    <div class="row">
-      <div class="col-md-6">
-        <div class="order-card bg-light">
-          <h5>Pesanan Anda</h5>
-          <div class="progress">
-            <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0"
-              aria-valuemax="100">50%</div>
-          </div>
-          <img src="{{ asset('uploads/logo.png') }}" alt="Order Image" class="img-fluid">
-          <form action="#" method="post">
-            <div class="mb-3">
-              <label for="exampleFormControlTextarea1" class="form-label">Ulasan Anda</label>
-              <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="order-card bg-light">
+            <h5>Pesanan Anda</h5>
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0"
+                aria-valuemax="100">50%</div>
             </div>
-            <button type="submit" class="btn btn-primary">Kirim Ulasan</button>
-          </form>
+            <img src="{{ asset('uploads/logo.png') }}" alt="Order Image" class="img-fluid mb-3">
+            <form action="#" method="post">
+              <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Ulasan Anda</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Kirim Ulasan</button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

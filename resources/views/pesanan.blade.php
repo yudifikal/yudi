@@ -135,7 +135,7 @@
       <div class="container">
         <h2>Daftar Pesanan</h2>
 
-        <h3>Pesanan Konstruksi</h3>
+        {{-- <h3>Pesanan Konstruksi</h3>
         <div class="row">
           @forelse ($pesananKontruksi as $pesanan)
             <div class="col-md-4 mb-4">
@@ -148,15 +148,23 @@
                   <p class="card-text">DP Bayar: Rp. {{ number_format($pesanan->dp_bayar, 0, ',', '.') }}</p>
                   <p class="card-text">Sisa Bayar: Rp. {{ number_format($pesanan->sisa_bayar, 0, ',', '.') }}</p>
                   <p class="card-text">Status: {{ $pesanan->status }}</p>
-                  <button class="btn status-btn status-belum" data-id="{{ $pesanan->id }}" data-type="kontruksi">Belum
-                    Mulai Dikerjakan</button>
+                  @if ($pesanan->status != 'dikirim')
+                    <form action="{{ route('pesanan.update', ['id' => $pesanan->id, 'type' => 'kontruksi']) }}"
+                      method="POST">
+                      @csrf
+                      @method('PATCH')
+                      <button type="submit" class="btn status-btn status-belum">Kirim Pesanan</button>
+                    </form>
+                  @else
+                    <button class="btn status-btn status-sudah" disabled>Sudah Dikirim</button>
+                  @endif
                 </div>
               </div>
             </div>
           @empty
             <p>Tidak ada pesanan konstruksi.</p>
           @endforelse
-        </div>
+        </div> --}}
 
         <h3>Pesanan Tukang</h3>
         <div class="row">
@@ -167,10 +175,20 @@
                   <h5 class="card-title">{{ $pesanan->nama_konsumen }}</h5>
                   <p class="card-text">Alamat: {{ $pesanan->alamat_konsumen }}</p>
                   <p class="card-text">Nomor HP: {{ $pesanan->no_hpkonsumen }}</p>
+                  <p class="card-text">Tukang yang dipesan: {{ $pesanan->nama_tukang }}</p>
+                  <p class="card-text">Jumlah Hari: {{ $pesanan->jumlah_hari }}</p>
                   <p class="card-text">Total Bayar: Rp. {{ number_format($pesanan->total_bayar, 0, ',', '.') }}</p>
                   <p class="card-text">Status: {{ $pesanan->status }}</p>
-                  <button class="btn status-btn status-belum" data-id="{{ $pesanan->id }}" data-type="tukang">Belum
-                    Mulai Dikerjakan</button>
+                  @if ($pesanan->status != 'Dikirim')
+                    <form action="{{ route('pesanan.update', ['id' => $pesanan->id, 'type' => 'tukang']) }}"
+                      method="POST">
+                      @csrf
+                      @method('PATCH')
+                      <button type="submit" class="btn status-btn status-belum">Kirim Pesanan</button>
+                    </form>
+                  @else
+                    <button class="btn status-btn status-sudah" disabled>Sudah Dikirim</button>
+                  @endif
                 </div>
               </div>
             </div>
@@ -188,10 +206,20 @@
                   <h5 class="card-title">{{ $pesanan->nama_konsumen }}</h5>
                   <p class="card-text">Alamat: {{ $pesanan->alamat_konsumen }}</p>
                   <p class="card-text">Nomor HP: {{ $pesanan->no_hpkonsumen }}</p>
+                  <p class="card-text">Material yang dipesan: {{ $pesanan->nama_material }}</p>
+                  <p class="card-text">Jumlah Pesanan: {{ $pesanan->jumlah_hari }}</p>
                   <p class="card-text">Total Bayar: Rp. {{ number_format($pesanan->total_bayar, 0, ',', '.') }}</p>
                   <p class="card-text">Status: {{ $pesanan->status }}</p>
-                  <button class="btn status-btn status-belum" data-id="{{ $pesanan->id }}" data-type="material">Belum
-                    Mulai Dikerjakan</button>
+                  @if ($pesanan->status != 'Dikirim')
+                    <form action="{{ route('pesanan.update', ['id' => $pesanan->id, 'type' => 'material']) }}"
+                      method="POST">
+                      @csrf
+                      @method('PATCH')
+                      <button type="submit" class="btn status-btn status-belum">Kirim Pesanan</button>
+                    </form>
+                  @else
+                    <button class="btn status-btn status-sudah" disabled>Sudah Dikirim</button>
+                  @endif
                 </div>
               </div>
             </div>
@@ -204,46 +232,6 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Load statuses from localStorage
-      var pesananElements = document.querySelectorAll('.status-btn');
-      pesananElements.forEach(function(button) {
-        var id = button.getAttribute('data-id');
-        var type = button.getAttribute('data-type');
-        var status = localStorage.getItem(type + '-' + id);
-
-        if (status === 'sudah') {
-          button.classList.remove('status-belum');
-          button.classList.add('status-sudah');
-          button.textContent = 'Sudah Mulai Dikerjakan';
-        } else {
-          button.classList.add('status-belum');
-          button.classList.remove('status-sudah');
-          button.textContent = 'Belum Mulai Dikerjakan';
-        }
-      });
-    });
-
-    document.querySelectorAll('.status-btn').forEach(button => {
-      button.addEventListener('click', function() {
-        var id = this.getAttribute('data-id');
-        var type = this.getAttribute('data-type');
-
-        if (this.classList.contains('status-belum')) {
-          this.classList.remove('status-belum');
-          this.classList.add('status-sudah');
-          this.textContent = 'Sudah Mulai Dikerjakan';
-          localStorage.setItem(type + '-' + id, 'sudah');
-        } else {
-          this.classList.remove('status-sudah');
-          this.classList.add('status-belum');
-          this.textContent = 'Belum Mulai Dikerjakan';
-          localStorage.setItem(type + '-' + id, 'belum');
-        }
-      });
-    });
-  </script>
 </body>
 
 </html>

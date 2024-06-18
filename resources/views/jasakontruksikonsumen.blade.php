@@ -9,32 +9,73 @@
   <style>
     .navbar-brand {
       color: #007bff !important;
+      font-weight: bold;
     }
 
     .custom-card {
       height: 500px;
-      /* Tinggi kartu yang diinginkan */
+      /* Desired card height */
       margin-bottom: 20px;
+      border-radius: 10px;
+      /* Rounded corners */
+      overflow: hidden;
+      /* Ensure contents stay within the card */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      /* Soft shadow */
     }
 
     .custom-img {
       height: 300px;
-      /* Tinggi gambar di dalam kartu */
+      /* Image height inside the card */
       object-fit: cover;
     }
 
-    .floating-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 1000;
+    .navbar-nav .nav-link.active {
+      font-weight: bold;
+      color: #007bff !important;
+    }
+
+    .nav-link {
+      transition: color 0.3s ease;
+      font-weight: bold;
+    }
+
+    .nav-link:hover {
+      color: #007bff !important;
+    }
+
+    .container-fluid-content {
+      padding-top: 70px;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+      /* Padding inside the card body */
+    }
+
+    .card-footer {
+      background-color: #f8f9fa;
+      /* Light gray background for footer */
+      border-top: none;
+      /* Remove default top border */
+    }
+
+    .card-footer a.btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+
+    .card-footer a.btn-primary:hover {
+      background-color: #0056b3;
+      border-color: #0056b3;
+
     }
   </style>
   <title>Jasa Kontruksi</title>
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="position: fixed; width: 100%; z-index: 1000; top:0;">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">
         CV. BANGUN BERSAMA
@@ -71,12 +112,13 @@
       </div>
     </div>
   </nav>
-  <div class="container-fluid mt-5 pt-4">
+
+  <div class="container-fluid container-fluid-content">
     <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
       <!-- Card 1 -->
       @foreach ($data as $item)
         <div class="col mb-4">
-          <div class="card h-100 custom-card bg-light"> <!-- Tambahkan kelas bg-light untuk warna abu-abu -->
+          <div class="card h-100 custom-card bg-light shadow"> <!-- Add shadow class for soft shadow -->
             <img src="{{ asset('uploads/' . $item->foto_kontruksi) }}" alt="Image of {{ $item->nama_kontruksi }}"
               class="card-img-top custom-img">
             <div class="card-body">
@@ -92,9 +134,8 @@
         </div>
       @endforeach
     </div>
-    <!-- Tombol untuk melihat tampilan jadwal konsultasi dan negosiasi -->
-    <a href="{{ route('konsultasi.index') }}" class="btn btn-secondary floating-btn">Lihat Jadwal Konsultasi</a>
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
