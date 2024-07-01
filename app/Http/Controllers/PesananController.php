@@ -17,14 +17,11 @@ class PesananController extends Controller
     // Menampilkan form pesanan konstruksi
     public function pesananKonsumen()
     {
-        // $pesananKontruksi = PesananKontruksi::where('email_konsumen', auth()->user()->email)->get();
-        // $pesananTukang = PesananTukang::where('email_konsumen', auth()->user()->email)->get();
-        // $pesananMaterial = PesananMaterial::where('email_konsumen', auth()->user()->email)->get();
 
-        $pesananKontruksi = PesananKontruksi::all();
-        $pesananTukang = PesananTukang::all();
-        $pesananMaterial = PesananMaterial::all();
-        return view('pesananKonsumen', compact('pesananKontruksi', 'pesananTukang', 'pesananMaterial'));
+        // $pesananKontruksi = PesananKontruksi::where('email_konsumen', auth()->user()->email)->get();
+        $pesananTukang = PesananTukang::where('email_konsumen', auth()->user()->email)->get();
+        $pesananMaterial = PesananMaterial::where('email_konsumen', auth()->user()->email)->get();
+        return view('pesananKonsumen', compact('pesananTukang', 'pesananMaterial'));
     }
 
     public function formPesananKontruksi($id)
@@ -81,6 +78,8 @@ class PesananController extends Controller
             'id_tukang' => $request->tukang_id,
             'email_konsumen' => auth()->user()->email,
             'pesanan' => $request->pesanan,
+            'tanggal_mulai' => $request->tanggal_mulai,
+            'tanggal_selesai' => $request->tanggal_selesai,
             'hari' => $request->jumlah_hari,
             'status' => 'Menunggu Pembayaran',
         ]);
@@ -126,7 +125,7 @@ class PesananController extends Controller
             return redirect()->back()->with('error', 'Invalid type.');
         }
 
-        $pesanan->status = 'Diterima';
+        $pesanan->status = 'diterima';
         $pesanan->save();
 
         return redirect()->back()->with('success', 'Pesanan berhasil diperbarui.');

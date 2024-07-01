@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\PesananKontruksi;
 use App\Models\PesananTukang;
 use App\Models\PesananMaterial;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminPesananController extends Controller
 {
@@ -34,6 +35,18 @@ class AdminPesananController extends Controller
         $pesanan->save();
 
         return redirect()->back()->with('success', 'Pesanan berhasil diperbarui.');
+    }
+    public function cetakPdf(Request $request)
+    {
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        $pesananTukang = PesananTukang::whereBetween('tgl_pesanan', [$startDate, $endDate])->get();
+        $pesananMaterial = PesananMaterial::whereBetween('tgl_pesanan', [$startDate, $endDate])->get();
+
+        $pdf = PDF::loadView('pesanan_pdf', compact('pesananTukang', 'pesananMaterial'));
+
+        return $pdf->download('pesanan.pdf');
     }
 }
 

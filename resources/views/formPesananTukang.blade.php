@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Form Pesanan Tukang</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
   <style>
     .navbar-brand {
@@ -43,15 +44,12 @@
       white-space: nowrap;
     }
   </style>
-  <title>Form Pesanan Tukang</title>
 </head>
 
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">
-        CV. BANGUN BERSAMA
-      </a>
+      <a class="navbar-brand" href="#">CV. BANGUN BERSAMA</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -110,9 +108,17 @@
           readonly>
       </div>
       <div class="mb-3">
+        <label for="tanggal_mulai" class="form-label">Tanggal Mulai</label>
+        <input type="date" class="form-control" id="tanggal_mulai" name="tanggal_mulai" required>
+      </div>
+      <div class="mb-3">
+        <label for="tanggal_selesai" class="form-label">Tanggal Selesai</label>
+        <input type="date" class="form-control" id="tanggal_selesai" name="tanggal_selesai" required>
+      </div>
+      <div class="mb-3">
         <label for="jumlah_hari" class="form-label">Jumlah Hari</label>
         <input type="number" class="form-control" id="jumlah_hari" name="jumlah_hari" value="1" min="1"
-          max="30">
+          readonly>
       </div>
       <div class="mb-3">
         <label for="total_bayar" class="form-label">Total Bayar</label>
@@ -126,13 +132,24 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    document.getElementById('jumlah_hari').addEventListener('input', function() {
-      var jumlahHariInput = document.getElementById('jumlah_hari');
-      var totalBayarInput = document.getElementById('total_bayar');
+    function calculateTotalBayar() {
+      var tanggalMulai = new Date(document.getElementById('tanggal_mulai').value);
+      var tanggalSelesai = new Date(document.getElementById('tanggal_selesai').value);
       var hargaTukang = {{ $tukang->harga_tukang }};
-      var jumlahHari = parseInt(jumlahHariInput.value);
-      totalBayarInput.value = hargaTukang * jumlahHari;
-    });
+
+      if (tanggalMulai && tanggalSelesai && tanggalSelesai >= tanggalMulai) {
+        var timeDifference = Math.abs(tanggalSelesai - tanggalMulai);
+        var jumlahHari = Math.ceil(timeDifference / (1000 * 3600 * 24)) + 1; // Including the start day
+        document.getElementById('jumlah_hari').value = jumlahHari;
+        document.getElementById('total_bayar').value = hargaTukang * jumlahHari;
+      } else {
+        document.getElementById('jumlah_hari').value = 1;
+        document.getElementById('total_bayar').value = hargaTukang;
+      }
+    }
+
+    document.getElementById('tanggal_mulai').addEventListener('input', calculateTotalBayar);
+    document.getElementById('tanggal_selesai').addEventListener('input', calculateTotalBayar);
   </script>
 </body>
 

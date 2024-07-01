@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JasaTukang;
 use App\Models\Konsultasi;
+use App\Models\material;
+use App\Models\PesananMaterial;
+use App\Models\PesananTukang;
 use Illuminate\Http\Request;
 
 class AdminKonsultasiController extends Controller
@@ -10,7 +14,13 @@ class AdminKonsultasiController extends Controller
     public function dashboard()
     {
         $konsultasi = Konsultasi::where('status', 'Menunggu Persetujuan')->get();
-        return view('dashboard', compact('konsultasi'));
+        $jmlTukang = JasaTukang::all()->count();
+        $jmlMaterial = material::all()->count();
+        $jmlPesanan = PesananTukang::all()->count();
+        $jmlPesanan1 = PesananMaterial::all()->count();
+        $totalPesanan = $jmlPesanan + $jmlPesanan1;
+
+        return view('dashboard', compact('konsultasi', 'jmlTukang', 'jmlMaterial', 'totalPesanan'));
     }
 
     public function approve($id)

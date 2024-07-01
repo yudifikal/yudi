@@ -67,6 +67,28 @@
     .btn-primary {
       white-space: nowrap;
     }
+
+    .btn-custom {
+      width: 100%;
+      background-color: #007bff;
+      color: #fff;
+      font-weight: bold;
+
+      border: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn-custom:hover {
+      background: linear-gradient(to right, #0056b3, #007bff);
+      box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+      transform: scale(1.05);
+    }
+
+    .btn-custom:focus {
+      outline: none;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
   </style>
   <title>Jasa Tukang</title>
 </head>
@@ -117,11 +139,13 @@
           <img src="{{ asset('uploads/' . $item->foto_tukang) }}" width="100">
           <div class="card-content">
             <h4 class="card-title mb-1">{{ $item->nama_tukang }}</h4>
-            <div class="card-price">{{ 'Rp.' . number_format($item->harga_tukang, null, '.') }}</div>
+            <div class="card-price">{{ 'Rp.' . number_format($item->harga_tukang, null, '.') }}/hari</div>
             <div class="card-description">{{ $item->keterangan_tukang }}</div>
             <div class="card-status">{{ $item->status }}</div>
-            <a href="{{ route('formPesananTukang', ['id' => $item->id]) }}" class="btn btn-primary">Tambahkan
-              Pesanan</a>
+            @if ($item->status == 'Tersedia')
+              <form action="{{ route('formPesananTukang', ['id' => $item->id]) }}" method="POST">@csrf
+                @method('GET') <button type="submit" class="btn btn-custom"> Buat Pesanan</button></form>
+            @endif
           </div>
         </div>
       </div>

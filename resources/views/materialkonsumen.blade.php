@@ -63,6 +63,26 @@
       margin-bottom: 10px;
       /* Bottom margin */
     }
+
+    .btn-custom {
+      width: 100%;
+      background-color: #007bff;
+      color: #fff;
+      font-weight: bold;
+      /* padding: 10px; */
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-custom:hover {
+      background: linear-gradient(to right, #0056b3, #007bff);
+      box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+      transform: scale(1.05);
+
+    }
+
+    .btn-full-width:hover {
+      background-color: #0056b3;
+    }
   </style>
   <title>Material</title>
 </head>
@@ -117,12 +137,14 @@
             <div class="card-body">
               <h5 class="card-title">{{ $item->nama_material }}</h5>
               <p class="card-text">{{ $item->keterangan_material }}</p>
-              <p class="card-text">{{ 'Harga : Rp.' . number_format($item->harga_material, null, '.') }}</p>
+              <p class="card-text">{{ 'Harga : Rp.' . number_format($item->harga_material, null, '.') }}/truk</p>
               <p class="card-text">{{ 'Status : ' . $item->status }}</p>
             </div>
             <div class="card-footer">
-              <a href="{{ route('formPesananMaterial', ['id' => $item->id]) }}" class="btn btn-primary w-100">Buat
-                Pesanan</a>
+              @if ($item->status == 'Tersedia')
+                <form action="{{ route('formPesananMaterial', ['id' => $item->id]) }}" method="POST">@csrf
+                  @method('GET') <button type="submit" class="btn btn-custom">Buat Pesanan</button></form>
+              @endif
             </div>
           </div>
         </div>

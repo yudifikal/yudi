@@ -19,6 +19,8 @@
       height: 100vh;
       overflow-y: auto;
       width: 280px;
+      background-color: #343a40;
+      /* Ubah warna sidebar sesuai keinginan */
     }
 
     .nav-link.active {
@@ -32,8 +34,31 @@
     }
 
     .order-card {
-      width: 50%;
-      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      /* Tambahkan bayangan halus */
+      transition: 0.3s;
+      /* Efek transisi */
+    }
+
+    .order-card:hover {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      /* Efek bayangan saat hover */
+    }
+
+    .order-card .card-body {
+      padding: 20px;
+    }
+
+    .order-card .card-title {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: #007bff;
+      /* Warna judul card */
+    }
+
+    .order-card .card-text {
+      font-size: 1.5rem;
+      font-weight: bold;
     }
 
     h2.dashboard-title {
@@ -90,17 +115,45 @@
         </li>
       </ul>
     </div>
-    <div class="content">
+    <div class="content w-100">
       <div class="container">
+        <a href="/tambahpengelola" class="btn btn-primary mb-3">Tambah Admin</a>
 
         @if (session('success'))
           <div class="alert alert-success">
             {{ session('success') }}
           </div>
         @endif
-        <h3>Kelola Jadwal Konsultasi</h3>
-        <table class="table table-bordered">
-          <thead>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="card order-card">
+              <div class="card-body">
+                <h5 class="card-title">Jumlah Tukang</h5>
+                <p class="card-text">{{ $jmlTukang }} orang</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card order-card">
+              <div class="card-body">
+                <h5 class="card-title">Jumlah Material</h5>
+                <p class="card-text">{{ $jmlMaterial }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card order-card">
+              <div class="card-body">
+                <h5 class="card-title">Jumlah Pesanan</h5>
+                <p class="card-text">{{ $totalPesanan }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="mt-4">Kelola Jadwal Konsultasi</h3>
+        <table class="table table-bordered mt-3">
+          <thead class="table-dark">
             <tr>
               <th>Nama</th>
               <th>Alamat</th>
@@ -126,57 +179,36 @@
                   <form action="{{ route('admin.konsultasi.approve', $item->id) }}" method="POST"
                     style="display:inline-block;">
                     @csrf
-                    <button type="submit" class="btn btn-success">Setujui</button>
+                    <button type="submit" class="btn btn-success btn-sm">Setujui</button>
                   </form>
                   <form action="{{ route('admin.konsultasi.reject', $item->id) }}" method="POST"
                     style="display:inline-block;">
                     @csrf
-                    <button type="submit" class="btn btn-danger">Tolak</button>
+                    <button type="submit" class="btn btn-danger btn-sm">Tolak</button>
                   </form>
                 </td>
               </tr>
             @endforeach
           </tbody>
         </table>
-        <div class="order-card mt-4">
-          <h5>Pesanan Konsumen</h5>
-          <div class="progress">
-            <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0"
-              aria-valuemax="100">50%</div>
-          </div>
-          <div class="d-flex justify-content-between">
-            <button class="btn btn-danger" onclick="decreaseProgress()">-</button>
-            <button class="btn btn-success" onclick="increaseProgress()">+</button>
-          </div>
-          <img src="{{ asset('uploads/logo.png') }}" alt="Order Image" class="img-fluid mt-3">
-        </div>
-        <div class="order-card mt-4">
-          <h5>Ulasan Konsumen</h5>
-          <div class="card">
-            <div class="card-body">
-              <p class="card-text">"Pelayanan sangat memuaskan, hasil pekerjaan rapi dan sesuai dengan harapan."</p>
-              <footer class="blockquote-footer">Konsumen A</footer>
-            </div>
-          </div>
-        </div>
+
       </div>
     </div>
-  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var path = window.location.pathname;
-      var navLinks = document.querySelectorAll('.nav-link');
-      navLinks.forEach(function(link) {
-        if (link.getAttribute('href') === path) {
-          link.classList.add('active');
-        } else {
-          link.classList.remove('active');
-        }
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var path = window.location.pathname;
+        var navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(function(link) {
+          if (link.getAttribute('href') === path) {
+            link.classList.add('active');
+          } else {
+            link.classList.remove('active');
+          }
+        });
       });
-    });
-  </script>
+    </script>
 </body>
 
 </html>

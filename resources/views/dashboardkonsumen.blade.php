@@ -13,30 +13,14 @@
     }
 
     .below-navbar-image {
-      height: 160px;
+      /* height: 160px;
       background-image: url('{{ asset('uploads/dashboard.png') }}');
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center;
-      width: 100%;
+      width: 100%; */
       margin-top: 56px;
       /* Same height as navbar */
-    }
-
-    .order-card {
-      border: 1px solid #dee2e6;
-      border-radius: 0.25rem;
-      margin-top: 20px;
-      padding: 20px;
-    }
-
-    .progress {
-      height: 20px;
-      margin-bottom: 20px;
-    }
-
-    .progress-bar {
-      background-color: #007bff;
     }
 
     .navbar-nav .nav-link.active {
@@ -54,7 +38,43 @@
     }
 
     .container-fluid-content {
-      padding-top: 1rem;
+      padding-top: 0rem;
+    }
+
+    .portfolio {
+      padding: 60px 0;
+    }
+
+    .portfolio-item {
+      margin-bottom: 30px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease-out, transform 1s ease-out;
+    }
+
+    .portfolio-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .portfolio-item img {
+      border-radius: 5px;
+    }
+
+    .portfolio-item .card-body {
+      padding: 1.5rem;
+    }
+
+    .portfolio-item .card-footer {
+      background-color: #f8f9fa;
+      border-top: none;
+    }
+
+    .footer {
+      background-color: #343a40;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
     }
   </style>
   <title>Dashboard</title>
@@ -99,15 +119,14 @@
     </div>
   </nav>
 
-  <div class="below-navbar-image"></div>
+  <div class="below-navbar-image">
+    <img src="{{ asset('uploads/dashboard.png') }}" class="img-fluid" alt="Pesanan">
+  </div>
   <div class="container-fluid container-fluid-content">
-    <h2>Jadwal Konsultasi</h2>
+    <h6>JADWAL KONSULTASI :</h6>
     <table class="table table-bordered">
       <thead>
         <tr>
-          <th>Nama</th>
-          <th>Alamat</th>
-          <th>Nomor HP</th>
           <th>Kontruksi</th>
           <th>Harga Kontruksi</th>
           <th>Tanggal</th>
@@ -119,9 +138,6 @@
       <tbody>
         @foreach ($konsultasi as $item)
           <tr>
-            <td>{{ $item->user->nama }}</td>
-            <td>{{ $item->user->alamat }}</td>
-            <td>{{ $item->user->no_hp }}</td>
             <td>{{ $item->kontruksi->nama_kontruksi }}</td>
             <td>{{ $item->kontruksi->harga_kontruksi }}</td>
             <td>{{ $item->tanggal_konsultasi }}</td>
@@ -129,37 +145,62 @@
             <td>{{ $item->status }}</td>
             <td>
               @if ($item->status == 'Ditolak, Silahkan atur jadwal baru')
-                <a href="{{ route('konsultasi.create', $item->id) }}" class="btn btn-primary">Atur Jadwal Baru</a>
+                <a href="{{ route('jasakontruksikonsumen.index') }}" class="btn btn-primary">Atur Jadwal Baru</a>
               @endif
             </td>
           </tr>
         @endforeach
       </tbody>
     </table>
-
-    <div class="container mt-5">
+    <div class="portfolio">
       <div class="row">
-        <div class="col-md-6">
-          <div class="order-card bg-light">
-            <h5>Pesanan Anda</h5>
-            <div class="progress">
-              <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0"
-                aria-valuemax="100">50%</div>
+        <div class="col-12">
+          <div class="card mb-4 portfolio-item">
+            <img src={{ asset('uploads/portofolio.png') }} class="card-img-top" alt="Company Introduction">
+            <div class="card-body">
+              <h5 class="card-title">About CV. Bangun Bersama</h5>
+              <p class="card-text">
+                CV. Bangun Bersama is a leading construction company dedicated to providing top-notch services in the
+                field of building and construction. With years of experience and a team of skilled professionals, we
+                ensure high-quality workmanship and customer satisfaction. Our services include residential and
+                commercial construction, renovations, and custom building projects. We take pride in our ability to
+                deliver projects on time and within budget, while maintaining the highest standards of safety and
+                sustainability.
+              </p>
+              <p class="card-text">
+                Our portfolio showcases a diverse range of projects, from small residential homes to large commercial
+                complexes. We are committed to innovation and excellence, constantly striving to exceed our clients'
+                expectations. Contact us today to discuss your construction needs and discover how we can bring your
+                vision to life.
+              </p>
             </div>
-            <img src="{{ asset('uploads/logo.png') }}" alt="Order Image" class="img-fluid mb-3">
-            <form action="#" method="post">
-              <div class="mb-3">
-                <label for="exampleFormControlTextarea1" class="form-label">Ulasan Anda</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-              </div>
-              <button type="submit" class="btn btn-primary">Kirim Ulasan</button>
-            </form>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <div class="footer">
+    <p>&copy; 2024 CV. BANGUN BERSAMA</p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var portfolioItems = document.querySelectorAll('.portfolio-item');
+
+      function onScroll() {
+        portfolioItems.forEach(function(item) {
+          if (item.getBoundingClientRect().top < window.innerHeight - 100) {
+            item.classList.add('visible');
+          }
+        });
+      }
+
+      window.addEventListener('scroll', onScroll);
+      onScroll(); // Trigger the scroll event initially in case items are already in view
+    });
+  </script>
 </body>
 
 </html>

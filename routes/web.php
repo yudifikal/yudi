@@ -37,6 +37,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/daftar', [PengelolaController::class, 'daftar']);
+Route::get('/tambahpengelola', [PengelolaController::class, 'daftaradmin']);
 Route::get('/tambahkontruksi', [PengelolaController::class, 'tambahkontruksi']);
 Route::get('/tambahtukang', [PengelolaController::class, 'tambahtukang']);
 Route::get('/tambahmaterial', [PengelolaController::class, 'tambahmaterial']);
@@ -52,6 +53,7 @@ Route::get('/jasatukangkonsumen', [KonsumenController::class, 'jasatukangkonsume
 
 Route::get('/pesanankonsumen', [KonsumenController::class, 'pesanankonsumen']);
 Route::post('/daftar', [PengelolaController::class, 'daftar']);
+Route::post('/tambahpengelola', [PengelolaController::class, 'daftaradmin']);
 Route::post('/tambahkontruksi', [PengelolaController::class, 'tambahkontruksi']);
 Route::post('/tambahtukang', [PengelolaController::class, 'tambahtukang']);
 Route::post('/tambahmaterial', [PengelolaController::class, 'tambahmaterial']);
@@ -95,6 +97,8 @@ Route::post('/konsultasi/jadwal', [KonsultasiController::class, 'store'])->name(
 Route::get('/dashboardkonsumen', [KonsultasiController::class, 'index'])->name('dashboardkonsumen');
 
 Route::get('dashboard', [AdminKonsultasiController::class, 'dashboard'])->name('dashboard');
+
+// Route::get('dashboard', [AdminKonsultasiController::class, 'card'])->name('dashboard');
 Route::post('konsultasi/approve/{id}', [AdminKonsultasiController::class, 'approve'])->name('admin.konsultasi.approve');
 Route::post('konsultasi/reject/{id}', [AdminKonsultasiController::class, 'reject'])->name('admin.konsultasi.reject');
 
@@ -117,3 +121,7 @@ Route::patch('/pesanankonsumen/{id}/{type}', [PesananController::class, 'update'
 
 Route::get('/bayar/{id}', [PaymentController::class, 'showPaymentForm'])->name('bayar.form');
 Route::post('/bayar', [PaymentController::class, 'processPayment'])->name('bayar.process');
+
+Route::post('xendit', [PaymentController::class, 'xendit']);
+
+Route::get('/pesanan/cetak-pdf', [AdminPesananController::class, 'cetakPdf'])->name('pesanan.cetakPdf');

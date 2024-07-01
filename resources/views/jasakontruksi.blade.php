@@ -7,6 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Jasa Konstruksi</title>
   <link rel="stylesheet" href="asset/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
   <style>
     .sidebar {
       position: fixed;
@@ -89,20 +90,20 @@
       <div class="p-5">
         <div class="row">
           <!-- FORM PENCARIAN -->
-          <div class="pb-3">
+          {{-- <div class="pb-3">
             <form class="d-flex" action="" method="get" enctype="multipart/form-data">
               <input class="form-control me-1" type="search" name="katakunci" value="{{ Request::get('katakunci') }}"
                 placeholder="Masukkan kata kunci" aria-label="Search">
               <button class="btn btn-secondary" type="submit">Cari</button>
             </form>
-          </div>
+          </div> --}}
 
           <!-- TOMBOL TAMBAH DATA -->
           <div class="pb-3">
             <a href='/tambahkontruksi' class="btn btn-primary">+ Tambah Data</a>
           </div>
 
-          <table class="table table-striped">
+          <table id="kontruksiTable" class="table table-striped">
             <thead>
               <tr>
                 <th class="col-md-1">No</th>
@@ -160,19 +161,21 @@
                       </form>
                   </td>
         </div>
-
         </tr>
         <?php $i++; ?>
         @endforeach
-
         </tbody>
         </table>
       </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
+      $(document).ready(function() {
+        $('#kontruksiTable').DataTable();
+
         var path = window.location.pathname;
         var navLinks = document.querySelectorAll('.nav-link');
         navLinks.forEach(function(link) {

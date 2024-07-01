@@ -7,6 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Pesanan</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
   <style>
     .sidebar {
       position: fixed;
@@ -29,47 +30,7 @@
     .content {
       margin-left: 280px;
       padding: 20px;
-    }
-
-    .card-custom {
-      padding-top: 80px;
-    }
-
-    .card-body {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .card-title {
-      font-size: 1.25rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .card-text {
-      margin-bottom: 0.5rem;
-    }
-
-    .card {
-      height: 100%;
-    }
-
-    .container {
-      height: 100%;
-    }
-
-    html,
-    body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
-
-    .container {
-      overflow-y: auto;
-    }
-
-    .status-btn {
-      margin-top: 10px;
+      overflow-x: hidden;
     }
 
     .status-belum {
@@ -80,6 +41,22 @@
     .status-sudah {
       background-color: #28a745;
       color: white;
+    }
+
+    .table-container {
+      margin-top: 20px;
+      border: 1px solid #dee2e6;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      overflow-x: hidden;
+      overflow-x: auto;
+      /* Scroll jika terlalu lebar */
+    }
+
+    .table {
+      min-width: 100%;
+      /* Atur lebar minimum tabel agar tidak terlalu kecil */
     }
   </style>
 </head>
@@ -131,107 +108,139 @@
       </ul>
     </div>
 
-    <div class="content">
+    <div class="content w-100">
       <div class="container">
+        <form action="{{ route('pesanan.cetakPdf') }}" method="GET" class="mb-3">
+          <div class="row">
+            <div class="col-md-4">
+              <label for="start_date" class="form-label">Tanggal Mulai</label>
+              <input type="date" class="form-control" id="start_date" name="start_date" required>
+            </div>
+            <div class="col-md-4">
+              <label for="end_date" class="form-label">Tanggal Akhir</label>
+              <input type="date" class="form-control" id="end_date" name="end_date" required>
+            </div>
+            <div class="col-md-4 align-self-end">
+              <button type="submit" class="btn btn-primary">Cetak PDF</button>
+            </div>
+          </div>
+        </form>
         <h2>Daftar Pesanan</h2>
 
-        {{-- <h3>Pesanan Konstruksi</h3>
-        <div class="row">
-          @forelse ($pesananKontruksi as $pesanan)
-            <div class="col-md-4 mb-4">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">{{ $pesanan->nama_konsumen }}</h5>
-                  <p class="card-text">Alamat: {{ $pesanan->alamat_konsumen }}</p>
-                  <p class="card-text">Nomor HP: {{ $pesanan->no_hpkonsumen }}</p>
-                  <p class="card-text">Total Bayar: Rp. {{ number_format($pesanan->total_bayar, 0, ',', '.') }}</p>
-                  <p class="card-text">DP Bayar: Rp. {{ number_format($pesanan->dp_bayar, 0, ',', '.') }}</p>
-                  <p class="card-text">Sisa Bayar: Rp. {{ number_format($pesanan->sisa_bayar, 0, ',', '.') }}</p>
-                  <p class="card-text">Status: {{ $pesanan->status }}</p>
-                  @if ($pesanan->status != 'dikirim')
-                    <form action="{{ route('pesanan.update', ['id' => $pesanan->id, 'type' => 'kontruksi']) }}"
-                      method="POST">
-                      @csrf
-                      @method('PATCH')
-                      <button type="submit" class="btn status-btn status-belum">Kirim Pesanan</button>
-                    </form>
-                  @else
-                    <button class="btn status-btn status-sudah" disabled>Sudah Dikirim</button>
-                  @endif
-                </div>
-              </div>
-            </div>
-          @empty
-            <p>Tidak ada pesanan konstruksi.</p>
-          @endforelse
-        </div> --}}
-
-        <h3>Pesanan Tukang</h3>
-        <div class="row">
-          @forelse ($pesananTukang as $pesanan)
-            <div class="col-md-4 mb-4">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">{{ $pesanan->nama_konsumen }}</h5>
-                  <p class="card-text">Alamat: {{ $pesanan->alamat_konsumen }}</p>
-                  <p class="card-text">Nomor HP: {{ $pesanan->no_hpkonsumen }}</p>
-                  <p class="card-text">Tukang yang dipesan: {{ $pesanan->nama_tukang }}</p>
-                  <p class="card-text">Jumlah Hari: {{ $pesanan->jumlah_hari }}</p>
-                  <p class="card-text">Total Bayar: Rp. {{ number_format($pesanan->total_bayar, 0, ',', '.') }}</p>
-                  <p class="card-text">Status: {{ $pesanan->status }}</p>
-                  @if ($pesanan->status != 'Dikirim')
-                    <form action="{{ route('pesanan.update', ['id' => $pesanan->id, 'type' => 'tukang']) }}"
-                      method="POST">
-                      @csrf
-                      @method('PATCH')
-                      <button type="submit" class="btn status-btn status-belum">Kirim Pesanan</button>
-                    </form>
-                  @else
-                    <button class="btn status-btn status-sudah" disabled>Sudah Dikirim</button>
-                  @endif
-                </div>
-              </div>
-            </div>
-          @empty
-            <p>Tidak ada pesanan tukang.</p>
-          @endforelse
+        <div class="table-container">
+          <h3>Pesanan Tukang</h3>
+          <table id="pesananTukangTable" class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Tanggal</th>
+                <th scope="col">Nama</th>
+                <th scope="col">Alamat</th>
+                <th scope="col">Nomor HP</th>
+                <th scope="col">Pesanan</th>
+                <th scope="col">Hari</th>
+                <th scope="col">Mulai</th>
+                <th scope="col">Selesai</th>
+                <th scope="col">Total</th>
+                <th scope="col">Status</th>
+                <th scope="col">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              @forelse ($pesananTukang as $pesanan)
+                <tr>
+                  <td>{{ $pesanan->tgl_pesanan }}</td>
+                  <td>{{ $pesanan->user->nama }}</td>
+                  <td>{{ $pesanan->user->alamat }}</td>
+                  <td>{{ $pesanan->user->no_hp }}</td>
+                  <td>{{ $pesanan->tukang->nama_tukang }}</td>
+                  <td>{{ $pesanan->hari }}</td>
+                  <td>{{ $pesanan->tanggal_mulai }}</td>
+                  <td>{{ $pesanan->tanggal_selesai }}</td>
+                  <td>Rp. {{ number_format($pesanan->total_bayar, 0, ',', '.') }}</td>
+                  <td>{{ $pesanan->status }}</td>
+                  <td>
+                    @if ($pesanan->status == 'dibayar')
+                      <form action="{{ route('pesanan.update', ['id' => $pesanan->id, 'type' => 'tukang']) }}"
+                        method="POST">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="btn status-belum">Kirim Pesanan</button>
+                      </form>
+                    @elseif($pesanan->status == 'Dikirim')
+                      <button class="btn status-sudah" disabled>Sudah Dikirim</button>
+                    @endif
+                  </td>
+                </tr>
+              @empty
+                <tr>
+                  <td colspan="9">Tidak ada pesanan tukang.</td>
+                </tr>
+              @endforelse
+            </tbody>
+          </table>
         </div>
 
-        <h3>Pesanan Material</h3>
-        <div class="row">
-          @forelse ($pesananMaterial as $pesanan)
-            <div class="col-md-4 mb-4">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">{{ $pesanan->nama_konsumen }}</h5>
-                  <p class="card-text">Alamat: {{ $pesanan->alamat_konsumen }}</p>
-                  <p class="card-text">Nomor HP: {{ $pesanan->no_hpkonsumen }}</p>
-                  <p class="card-text">Material yang dipesan: {{ $pesanan->nama_material }}</p>
-                  <p class="card-text">Jumlah Pesanan: {{ $pesanan->jumlah_hari }}</p>
-                  <p class="card-text">Total Bayar: Rp. {{ number_format($pesanan->total_bayar, 0, ',', '.') }}</p>
-                  <p class="card-text">Status: {{ $pesanan->status }}</p>
-                  @if ($pesanan->status != 'Dikirim')
-                    <form action="{{ route('pesanan.update', ['id' => $pesanan->id, 'type' => 'material']) }}"
-                      method="POST">
-                      @csrf
-                      @method('PATCH')
-                      <button type="submit" class="btn status-btn status-belum">Kirim Pesanan</button>
-                    </form>
-                  @else
-                    <button class="btn status-btn status-sudah" disabled>Sudah Dikirim</button>
-                  @endif
-                </div>
-              </div>
-            </div>
-          @empty
-            <p>Tidak ada pesanan material.</p>
-          @endforelse
+        <div class="table-container">
+          <h3>Pesanan Material</h3>
+          <table id="pesananMaterialTable" class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Tanggal</th>
+                <th scope="col">Nama</th>
+                <th scope="col">Alamat</th>
+                <th scope="col">Nomor HP</th>
+                <th scope="col">Pesanan Material</th>
+                <th scope="col">Jumlah</th>
+                <th scope="col">Total Bayar</th>
+                <th scope="col">Status</th>
+                <th scope="col">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              @forelse ($pesananMaterial as $pesanan)
+                <tr>
+                  <td>{{ $pesanan->tgl_pesanan }}</td>
+                  <td>{{ $pesanan->user->nama }}</td>
+                  <td>{{ $pesanan->user->alamat }}</td>
+                  <td>{{ $pesanan->user->no_hp }}</td>
+                  <td>{{ $pesanan->material->nama_material }}</td>
+                  <td>{{ $pesanan->hari }}</td>
+                  <td>Rp. {{ number_format($pesanan->total_bayar, 0, ',', '.') }}</td>
+                  <td>{{ $pesanan->status }}</td>
+                  <td>
+                    @if ($pesanan->status == 'dibayar')
+                      <form action="{{ route('pesanan.update', ['id' => $pesanan->id, 'type' => 'material']) }}"
+                        method="POST">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="btn status-belum">Kirim Pesanan</button>
+                      </form>
+                    @elseif($pesanan->status == 'Dikirim')
+                      <button class="btn status-sudah" disabled>Sudah Dikirim</button>
+                    @endif
+                  </td>
+                </tr>
+              @empty
+                <tr>
+                  <td colspan="9">Tidak ada pesanan material.</td>
+                </tr>
+              @endforelse
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   </div>
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#pesananTukangTable').DataTable();
+      $('#pesananMaterialTable').DataTable();
+    });
+  </script>
 </body>
 
 </html>

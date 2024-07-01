@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PesananMaterial;
 use App\Models\PesananTukang;
+use App\Services\CheckoutService;
 use Illuminate\Http\Request;
 use Xendit\Xendit;
 
@@ -20,17 +21,31 @@ class PaymentController extends Controller
 
     public function processPayment(Request $request)
     {
-        XenditConfiguration::setXenditKey('your-xendit-api-key-here');
+        $id = $request->id;
+        $harga = $request->harga;
+        $jenis = $request->jenis;
+        $nama = $request->nama;
 
-        $params = [
-            'external_id' => 'order_id_' . $request->order_id,
-            'payer_email' => $request->email,
-            'description' => 'Pembayaran Pesanan #' . $request->order_id,
-            'amount' => $request->amount,
-        ];
+        $checkout = new CheckoutService();
+        $link = $checkout->createLink($jenis, $id, $nama, $harga);
 
-        $invoice = \Xendit\Invoice::create($params);
+        return redirect()->away($link);
+    }
 
-        return redirect($invoice['invoice_url']);
+    public function xendit(Request $r)
+    {
+        $data = explode('|', $r['external_id']);
+        $jenis = $data[0];
+        $id = $data[1];
+
+        if ($jenis == 'tukang') {
+            $pesanan = PesananTukang::find($id);
+            $pesanan->status = 'dibayar';
+            $pesanan->save();
+        } elseif ($jenis == 'material') {
+            $pesanan = PesananMaterial::find($id);
+            $pesanan->status = 'dibayar';
+            $pesanan->save();
+        }
     }
 }

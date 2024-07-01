@@ -63,12 +63,40 @@ class PengelolaController extends Controller
                 'password' => Hash::make($request->password),
                 'alamat' => $request->alamat,
                 'no_hp' => $request->no_hp,
-                'role' => $request->role, // atau sesuai dengan role yang diinginkan
+                'role' => $request->input('role', 'konsumen'), // atau sesuai dengan role yang diinginkan
             ]);
             return redirect('/login');
         }
 
         return view('/daftar');
+    }
+    public function daftaradmin(Request $request)
+    {
+        if ($request->isMethod('post')) {
+            $user = new User();
+
+            $request->validate([
+                'nama' => 'required|string|max:50',
+                'email' => 'required|string|email|max:50|unique:users',
+                'password' => 'required|string|min:8',
+                'alamat' => 'required|string|max:50',
+                'no_hp' => 'required|string|max:50',
+                'no_hp' => 'required',
+
+            ]);
+
+            $user = User::create([
+                'nama' => $request->nama,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'alamat' => $request->alamat,
+                'no_hp' => $request->no_hp,
+                'role' => $request->role, // atau sesuai dengan role yang diinginkan
+            ]);
+            return redirect('/dashboard');
+        }
+
+        return view('/tambahpengelola');
     }
     public function tambahkontruksi(Request $request)
     {

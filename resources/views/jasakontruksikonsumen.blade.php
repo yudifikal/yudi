@@ -60,15 +60,23 @@
       /* Remove default top border */
     }
 
-    .card-footer a.btn-primary {
-      background-color: #007bff;
-      border-color: #007bff;
+    .btn-custom {
+      background: #007bff;
+      border: none;
+      border-radius: 5px;
+      color: #fff;
+      font-weight: bold;
+
+      text-align: center;
+      text-transform: uppercase;
+      width: 100%;
+      transition: all 0.3s ease;
     }
 
-    .card-footer a.btn-primary:hover {
-      background-color: #0056b3;
-      border-color: #0056b3;
-
+    .btn-custom:hover {
+      background: linear-gradient(to right, #0056b3, #007bff);
+      box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+      transform: scale(1.05);
     }
   </style>
   <title>Jasa Kontruksi</title>
@@ -115,10 +123,9 @@
 
   <div class="container-fluid container-fluid-content">
     <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
-      <!-- Card 1 -->
       @foreach ($data as $item)
         <div class="col mb-4">
-          <div class="card h-100 custom-card bg-light shadow"> <!-- Add shadow class for soft shadow -->
+          <div class="card h-100 custom-card bg-light shadow">
             <img src="{{ asset('uploads/' . $item->foto_kontruksi) }}" alt="Image of {{ $item->nama_kontruksi }}"
               class="card-img-top custom-img">
             <div class="card-body">
@@ -127,8 +134,7 @@
               <p class="card-text">{{ 'Harga : Rp.' . number_format($item->harga_kontruksi, null, '.') }}</p>
             </div>
             <div class="card-footer">
-              <a href="{{ route('konsultasi.create', $item->id) }}" class="btn btn-primary w-100">Atur jadwal
-                konsultasi</a>
+              <a href="{{ route('konsultasi.create', $item->id) }}" class="btn btn-custom">Atur jadwal konsultasi</a>
             </div>
           </div>
         </div>

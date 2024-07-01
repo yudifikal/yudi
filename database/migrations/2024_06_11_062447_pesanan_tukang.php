@@ -22,6 +22,8 @@ return new class extends Migration
             $table->integer('hari')->nullable();
             $table->unsignedBigInteger('id_tukang');
             $table->string('status')->default('Menunggu Pembayaran');
+            $table->date('tanggal_mulai'); // Add this line
+            $table->date('tanggal_selesai'); // Add this line
             $table->timestamps();
 
             // Foreign keys

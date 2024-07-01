@@ -13,7 +13,7 @@ class PesananTukang extends Model
     protected $table = 'pesanan_tukang';
     protected $fillable = [
         'tgl_pesanan', 'total_bayar', 'pesanan',
-        'email_konsumen', 'id_tukang', 'status', 'hari'
+        'email_konsumen', 'id_tukang', 'status', 'hari', 'tanggal_mulai', 'tanggal_selesai'
     ];
 
     public function tukang()

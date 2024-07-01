@@ -113,6 +113,21 @@
       background-color: #28a745;
       color: white;
     }
+
+    .below-navbar-image {
+      /* height: 160px;
+      background-image: url('{{ asset('uploads/pesanan.png') }}');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      width: 100%; */
+      margin-top: 56px;
+      /* Same height as navbar */
+    }
+
+    .container-fluid-content {
+      padding-top: 0rem;
+    }
   </style>
   <title>Daftar Pesanan</title>
 </head>
@@ -154,55 +169,45 @@
     </div>
   </nav>
 
+  <div class="below-navbar-image">
+    <img src="{{ asset('uploads/pesanan.png') }}" class="img-fluid" alt="Pesanan">
+  </div>
   <div class="container-fluid container-fluid-content">
-    <h2 class="section-title">Daftar Pesanan</h2>
-
-    <h3 class="section-title">Pesanan Konstruksi</h3>
-    <div class="row">
-      @forelse ($pesananKontruksi as $pesanan)
-        <div class="col-md-4 mb-4">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">{{ $pesanan->nama_konsumen }}</h5>
-              <p class="card-text">Alamat: {{ $pesanan->alamat_konsumen }}</p>
-              <p class="card-text">Nomor HP: {{ $pesanan->no_hpkonsumen }}</p>
-              <p class="card-text">Konstruksi yang dipesan: {{ $pesanan->nama_kontruksi }}</p>
-              <p class="card-text">Total Bayar: Rp. {{ number_format($pesanan->total_bayar, 0, ',', '.') }}</p>
-              <p class="card-text">DP Bayar: Rp. {{ number_format($pesanan->dp_bayar, 0, ',', '.') }}</p>
-              <p class="card-text">Sisa Bayar: Rp. {{ number_format($pesanan->sisa_bayar, 0, ',', '.') }}</p>
-              <p class="card-text">Status: {{ $pesanan->status }}</p>
-              <a href="{{ route('bayar.form', $pesanan->id) }}" class="btn btn-pay-now">Bayar Sekarang</a>
-
-            </div>
-          </div>
-        </div>
-      @empty
-        <p>Tidak ada pesanan konstruksi.</p>
-      @endforelse
-    </div>
-
+    {{-- <h2 class="section-title">Daftar Pesanan</h2> --}}
     <h3 class="section-title">Pesanan Tukang</h3>
     <div class="row">
       @forelse ($pesananTukang as $pesanan)
         <div class="col-md-4 mb-4">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">{{ $pesanan->email_konsumen }}</h5>
-              <p class="card-text">Alamat: {{ $pesanan->alamat_konsumen }}</p>
-              <p class="card-text">Nomor HP: {{ $pesanan->no_hpkonsumen }}</p>
-              <p class="card-text">Tukang yang dipesan: {{ $pesanan->nama_tukang }}</p>
-              <p class="card-text">Jumlah Hari: {{ $pesanan->jumlah_hari }}</p>
+              <h5 class="card-title">{{ $pesanan->user->nama }}</h5>
+              <p class="card-text">Alamat: {{ $pesanan->user->alamat }}</p>
+              <p class="card-text">Nomor HP: {{ $pesanan->user->no_hp }}</p>
+              <p class="card-text">Tukang yang dipesan: {{ $pesanan->tukang->nama_tukang }}</p>
+              <p class="card-text">Tanggal Mulai: {{ $pesanan->tanggal_mulai }}</p>
+              <p class="card-text">Tanggal Selesai: {{ $pesanan->tanggal_selesai }}</p>
+              <p class="card-text">Jumlah Hari: {{ $pesanan->hari }}</p>
               <p class="card-text">Total Bayar: Rp. {{ number_format($pesanan->total_bayar, 0, ',', '.') }}</p>
+              <p class="card-text">Tanggal Pesanan: {{ $pesanan->tgl_pesanan }}</p>
               <p class="card-text">Status: {{ $pesanan->status }}</p>
-              <a href="{{ route('bayar.form', $pesanan->id) }}" class="btn btn-pay-now">Bayar Sekarang</a>
-              @if ($pesanan->status != 'Diterima')
+              <form method="post" action="/bayar">
+                @csrf
+                <input type="hidden" name="harga" value="{{ $pesanan->total_bayar }}">
+                <input type="hidden" name="id" value="{{ $pesanan->id }}">
+                <input type="hidden" name="nama" value="{{ $pesanan->tukang->nama_tukang }}">
+                <input type="hidden" name="jenis" value="tukang">
+                @if ($pesanan->status == 'Menunggu Pembayaran')
+                  <button class="btn btn-pay-now">Bayar Sekarang</button>
+                @endif
+              </form>
+              @if ($pesanan->status == 'Dikirim')
                 <form action="{{ route('pesanankonsumen.update', ['id' => $pesanan->id, 'type' => 'tukang']) }}"
                   method="POST">
                   @csrf
                   @method('PATCH')
                   <button type="submit" class="btn status-btn status-belum">Terima Pesanan</button>
                 </form>
-              @else
+              @elseif($pesanan->status == 'diterima')
                 <button class="btn status-btn status-sudah" disabled>Sudah Diterima</button>
               @endif
             </div>
@@ -219,31 +224,41 @@
         <div class="col-md-4 mb-4">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">{{ $pesanan->nama_konsumen }}</h5>
-              <p class="card-text">Alamat: {{ $pesanan->alamat_konsumen }}</p>
-              <p class="card-text">Nomor HP: {{ $pesanan->no_hpkonsumen }}</p>
-              <p class="card-text">Material yang dipesan: {{ $pesanan->nama_material }}</p>
-              <p class="card-text">Jumlah Pesanan: {{ $pesanan->jumlah_hari }}</p>
+              <h5 class="card-title">{{ $pesanan->user->nama }}</h5>
+              <p class="card-text">Alamat: {{ $pesanan->user->alamat }}</p>
+              <p class="card-text">Nomor HP: {{ $pesanan->user->no_hp }}</p>
+              <p class="card-text">Material yang dipesan: {{ $pesanan->material->nama_material }}</p>
+              <p class="card-text">Jumlah Pesanan: {{ $pesanan->hari }}</p>
               <p class="card-text">Total Bayar: Rp. {{ number_format($pesanan->total_bayar, 0, ',', '.') }}</p>
               <p class="card-text">Status: {{ $pesanan->status }}</p>
-              <a href="{{ route('bayar.form', $pesanan->id) }}" class="btn btn-pay-now">Bayar Sekarang</a>
-              @if ($pesanan->status != 'Diterima')
+              <form method="post" action="/bayar">
+                @csrf
+                <input type="hidden" name="harga" value="{{ $pesanan->total_bayar }}">
+                <input type="hidden" name="id" value="{{ $pesanan->id }}">
+                <input type="hidden" name="nama" value="{{ $pesanan->material->nama_material }}">
+                <input type="hidden" name="jenis" value="material">
+                @if ($pesanan->status == 'Menunggu Pembayaran')
+                  <button class="btn btn-pay-now">Bayar Sekarang</button>
+                @endif
+              </form>
+              @if ($pesanan->status == 'Dikirim')
                 <form action="{{ route('pesanankonsumen.update', ['id' => $pesanan->id, 'type' => 'material']) }}"
                   method="POST">
                   @csrf
                   @method('PATCH')
                   <button type="submit" class="btn status-btn status-belum">Terima Pesanan</button>
                 </form>
-              @else
+              @elseif($pesanan->status == 'diterima')
                 <button class="btn status-btn status-sudah" disabled>Sudah Diterima</button>
               @endif
             </div>
           </div>
         </div>
-      @empty
-        <p>Tidak ada pesanan material.</p>
-      @endforelse
     </div>
+  @empty
+    <p>Tidak ada pesanan material.</p>
+    @endforelse
+  </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
